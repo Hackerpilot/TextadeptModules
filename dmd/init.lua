@@ -26,35 +26,36 @@ events.connect(events.CHAR_ADDED, function(ch)
 	end
 end)
 
---events.connect(events.FILE_AFTER_SAVE, function()
---	if buffer:get_lexer() ~= "dmd" then return end
---	buffer:annotation_clear_all()
---	--buffer.annotation_visible = _SCINTILLA.constants.ANNOTATION_STANDARD
---	local command = "dscanner --syntaxCheck 2>&1 " .. buffer.filename
---	local p = io.popen(command)
---	for line in p:lines() do
---		lineNumber, column, level, message = string.match(line, "^.-%((%d+):(%d+)%)%[(%w+)%]: (.+)$")
---		local l = tonumber(lineNumber) - 1
---		if l <= 0 then
---			l = buffer.line_count - 1
---		end
---		if l >= 0 then
---			local c = tonumber(column)
---			if level == "error" then
---				buffer.annotation_style[l] = 8
---			elseif buffer.annotation_style[l] ~= 8 then
---				buffer.annotation_style[l] = 2
---			end
---
---			local t = buffer.annotation_text[l]
---			if #t > 0 then
---				buffer.annotation_text[l] = buffer.annotation_text[l] .. "\n" .. message
---			else
---				buffer.annotation_text[l] = message
---			end
---		end
---	end
---end)
+events.connect(events.FILE_AFTER_SAVE, function()
+	if buffer:get_lexer() ~= "dmd" then return end
+	buffer:annotation_clear_all()
+	--buffer.annotation_visible = _SCINTILLA.constants.ANNOTATION_STANDARD
+	local command = "dscanner --syntaxCheck 2>&1 " .. buffer.filename
+	local p = io.popen(command)
+	for line in p:lines() do
+		lineNumber, column, level, message = string.match(line, "^.-%((%d+):(%d+)%)%[(%w+)%]: (.+)$")
+		if lineNumber == nil then return end
+		local l = tonumber(lineNumber) - 1
+		if l <= 0 then
+			l = buffer.line_count - 1
+		end
+		if l >= 0 then
+			local c = tonumber(column)
+			if level == "error" then
+				buffer.annotation_style[l] = 8
+			elseif buffer.annotation_style[l] ~= 8 then
+				buffer.annotation_style[l] = 2
+			end
+
+			local t = buffer.annotation_text[l]
+			if #t > 0 then
+				buffer.annotation_text[l] = buffer.annotation_text[l] .. "\n" .. message
+			else
+				buffer.annotation_text[l] = message
+			end
+		end
+	end
+end)
 
 
 local function autocomplete()
