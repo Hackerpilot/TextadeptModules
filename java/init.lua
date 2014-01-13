@@ -1,3 +1,5 @@
+local M = {}
+
 local cstyle = require 'common.cstyle'
 
 -- Java-specific key commands.
@@ -7,7 +9,7 @@ if type(keys) == 'table' then
 end
 
 keys.java = {
-	al = {
+	[keys.LANGUAGE_MODULE_PREFIX] = {
 		m = { io.open_file,
 		(_HOME..'/modules/java/init.lua'):iconv('UTF-8', _CHARSET) },
 	},
@@ -15,7 +17,7 @@ keys.java = {
 	['s\n'] = {cstyle.newline_semicolon},
 	['c;'] = {cstyle.endline_semicolon},
 	['}'] = {cstyle.match_brace_indent},
-	['c{'] = {cstyle.openBraceMagic, true},
+	['c{'] = {cstyle.openBraceMagic, false},
 	['cM'] = {cstyle.selectScope},
 	['\n'] = {cstyle.enter_key_pressed},
 }
