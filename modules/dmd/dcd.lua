@@ -1,0 +1,1 @@
+/home/alaran/src/dcd/editors/textadept/modules/dmd/dcd.lua
