@@ -31,7 +31,7 @@ property['color.cyan2'] =          0xa8a876
 property['color.caret_fore'] =     0xc4b9b9
 property['color.selection_fore'] = 0x382b2b
 property['color.selection_back'] = 0xc4acac
-property['color.edge'] = 0x382b2b
+property['color.edge'] =           0x382b2b
 
 -- Default font.
 property['font'], property['fontsize'] = 'DejaVu Sans Mono', 10
@@ -93,26 +93,26 @@ buffer:set_fold_margin_hi_colour(true, property_int['color.background'])
 -- Fold Margin Markers.
 local c = _SCINTILLA.constants
 
-buffer.marker_fore[c.SC_MARKNUM_FOLDEROPEN] = property_int['color.background']
-buffer.marker_back[c.SC_MARKNUM_FOLDEROPEN] = property_int['color.text1']
+buffer.marker_fore[c.MARKNUM_FOLDEROPEN] = property_int['color.background']
+buffer.marker_back[c.MARKNUM_FOLDEROPEN] = property_int['color.text1']
 
-buffer.marker_fore[c.SC_MARKNUM_FOLDER] = property_int['color.background']
-buffer.marker_back[c.SC_MARKNUM_FOLDER] = property_int['color.text1']
+buffer.marker_fore[c.MARKNUM_FOLDER] = property_int['color.background']
+buffer.marker_back[c.MARKNUM_FOLDER] = property_int['color.text1']
 
-buffer.marker_fore[c.SC_MARKNUM_FOLDERSUB] = property_int['color.background']
-buffer.marker_back[c.SC_MARKNUM_FOLDERSUB] = property_int['color.text1']
+buffer.marker_fore[c.MARKNUM_FOLDERSUB] = property_int['color.background']
+buffer.marker_back[c.MARKNUM_FOLDERSUB] = property_int['color.text1']
 
-buffer.marker_fore[c.SC_MARKNUM_FOLDERTAIL] = property_int['color.background']
-buffer.marker_back[c.SC_MARKNUM_FOLDERTAIL] = property_int['color.text1']
+buffer.marker_fore[c.MARKNUM_FOLDERTAIL] = property_int['color.background']
+buffer.marker_back[c.MARKNUM_FOLDERTAIL] = property_int['color.text1']
 
-buffer.marker_fore[c.SC_MARKNUM_FOLDEREND] = property_int['color.background']
-buffer.marker_back[c.SC_MARKNUM_FOLDEREND] = property_int['color.text1']
+buffer.marker_fore[c.MARKNUM_FOLDEREND] = property_int['color.background']
+buffer.marker_back[c.MARKNUM_FOLDEREND] = property_int['color.text1']
 
-buffer.marker_fore[c.SC_MARKNUM_FOLDEROPENMID] = property_int['color.background']
-buffer.marker_back[c.SC_MARKNUM_FOLDEROPENMID] = property_int['color.text1']
+buffer.marker_fore[c.MARKNUM_FOLDEROPENMID] = property_int['color.background']
+buffer.marker_back[c.MARKNUM_FOLDEROPENMID] = property_int['color.text1']
 
-buffer.marker_fore[c.SC_MARKNUM_FOLDERMIDTAIL] = property_int['color.background']
-buffer.marker_back[c.SC_MARKNUM_FOLDERMIDTAIL] = property_int['color.text1']
+buffer.marker_fore[c.MARKNUM_FOLDERMIDTAIL] = property_int['color.background']
+buffer.marker_back[c.MARKNUM_FOLDERMIDTAIL] = property_int['color.text1']
 
 -- Long Lines.
 buffer.edge_colour = property_int['color.edge']

@@ -20,10 +20,10 @@ property['color.red1'] =           0x62628c
 property['color.red2'] =           0x7676a8
 property['color.yellow1'] =        0x627e8c
 property['color.yellow2'] =        0x89b1c4
-property['color.orange1'] =          0x54678c
-property['color.orange2'] =          0x6592a8
-property['color.brown1'] =          0x8c8c62
-property['color.brown2'] =          0x76a8a8
+property['color.orange1'] =        0x54678c
+property['color.orange2'] =        0x6592a8
+property['color.brown1'] =         0x8c8c62
+property['color.brown2'] =         0x76a8a8
 property['color.blue1'] =          0x8c6754
 property['color.blue2'] =          0xa89265
 property['color.cyan1'] =          0x628c8c
@@ -31,7 +31,7 @@ property['color.cyan2'] =          0xa8a876
 property['color.caret_fore'] =     0xc4b9b9
 property['color.selection_fore'] = 0x382b2b
 property['color.selection_back'] = 0xc4acac
-property['color.edge'] = 0x382b2b
+property['color.edge'] =           0x382b2b
 
 -- Default font.
 property['font'], property['fontsize'] = 'DejaVu Sans Mono', 10
