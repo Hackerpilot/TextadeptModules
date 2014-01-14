@@ -14,7 +14,7 @@ function M.find_all_occurrences()
 	end
 	local word = buffer:text_range(s, e)
 	if word == '' then return end
-	buffer.search_flags = c.SCFIND_WHOLEWORD + c.SCFIND_MATCHCASE
+	buffer.search_flags = c.FIND_WHOLEWORD + c.FIND_MATCHCASE
 	buffer.target_start = 0
 	buffer.target_end = buffer.length
 	while buffer:search_in_target(word) > 0 do
