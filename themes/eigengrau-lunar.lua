@@ -116,3 +116,7 @@ buffer.marker_back[c.SC_MARKNUM_FOLDERMIDTAIL] = property_int['color.text1']
 
 -- Long Lines.
 buffer.edge_colour = property_int['color.edge']
+
+buffer.indic_fore[textadept.editing.INDIC_HIGHLIGHT] = 0x627e8c
+buffer.indic_alpha[textadept.editing.INDIC_HIGHLIGHT] = 128
+buffer.indic_style[textadept.editing.INDIC_HIGHLIGHT] = c.INDIC_ROUNDBOX
