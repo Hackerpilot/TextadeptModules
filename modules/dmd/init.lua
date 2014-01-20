@@ -60,7 +60,7 @@ end)
 
 local function autocomplete()
 	dcd.registerImages()
-	dcd.autocomplete(string.byte('.'))
+	dcd.autocomplete()
 	if not buffer:auto_c_active() then
 		textadept.editing.autocomplete_word(keywords)
 	end
@@ -80,6 +80,7 @@ keys.dmd = {
 	['cM'] = {cstyle.selectScope},
 	['\n'] = {cstyle.enter_key_pressed},
 	['c\n'] = {autocomplete},
+	['cH'] = {dcd.showDoc},
 	['down'] = {dcd.cycleCalltips, 1},
 	['up'] = {dcd.cycleCalltips, -1},
 	['cG'] = {dcd.gotoDeclaration}
