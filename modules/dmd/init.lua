@@ -29,16 +29,12 @@ end)
 events.connect(events.FILE_AFTER_SAVE, function()
 	if buffer:get_lexer() ~= "dmd" then return end
 	buffer:annotation_clear_all()
-	--buffer.annotation_visible = _SCINTILLA.constants.ANNOTATION_STANDARD
-	local command = "dscanner --syntaxCheck 2>&1 " .. buffer.filename
+	local command = "dscanner --styleCheck 2>&1 " .. buffer.filename
 	local p = io.popen(command)
 	for line in p:lines() do
 		lineNumber, column, level, message = string.match(line, "^.-%((%d+):(%d+)%)%[(%w+)%]: (.+)$")
 		if lineNumber == nil then return end
 		local l = tonumber(lineNumber) - 1
-		if l <= 0 then
-			l = buffer.line_count - 1
-		end
 		if l >= 0 then
 			local c = tonumber(column)
 			if level == "error" then
