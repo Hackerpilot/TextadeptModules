@@ -53,6 +53,66 @@ events.connect(events.FILE_AFTER_SAVE, function()
 	end
 end)
 
+local function expandContext(meta)
+	local patterns = {"struct:(%w+)", "class:([%w_]+)", "template:([%w_]+)",
+		"interface:([%w_]+)", "union:([%w_]+)", "function:([%w_]+)"}
+	if meta == nil or meta == "" then return "" end
+	for item in meta:gmatch("%w+:[%w%d_]+") do
+		for _, pattern in ipairs(patterns) do
+			local result = item:match(pattern)
+			if result ~= nil then return result end
+		end
+	end
+	return ""
+end
+
+local function expandCtagsType(tagType)
+    if tagType == "g" then return "enum"
+    elseif tagType == "e" then return ""
+    elseif tagType == "v" then return "variable"
+    elseif tagType == "i" then return "interface"
+    elseif tagType == "c" then return "class"
+    elseif tagType == "s" then return "struct"
+    elseif tagType == "f" then return "function"
+    elseif tagType == "u" then return "union"
+    elseif tagType == "T" then return "template"
+	else return "" end
+end
+
+local function symbolIndex()
+	local fileName = os.tmpname()
+	local tmpFile = io.open(fileName, "w")
+	tmpFile:write(buffer:get_text():sub(1, buffer.length))
+	tmpFile:flush()
+	tmpFile:close()
+	local command = "dscanner --ctags " .. fileName
+	local p = io.popen(command, "r")
+	local r = p:read("*a")
+	p:close()
+	os.remove(fileName)
+	local symbolList = {}
+	local i = 0
+	local lineDict = {}
+	for line in r:gmatch("(.-)\n") do
+		if not line:match("^!") then
+			local name, file, lineNumber, tagType, meta = line:match("(%w+)\t([%w/_ ]+)\t(%d+);\"\t(%w)\t?(.*)")
+			table.insert(symbolList, name)
+			table.insert(symbolList, expandCtagsType(tagType))
+			table.insert(symbolList, expandContext(meta))
+			table.insert(symbolList, lineNumber)
+			lineDict[i + 1] = tonumber(lineNumber - 1)
+			i = i + 1
+		end
+	end
+	local button, i = ui.dialogs.filteredlist{
+		title = "Go to symbol",
+		columns = {"name", "type", "context", "line"},
+		items = symbolList
+	}
+	if i ~= nil then
+		buffer:goto_line(lineDict[i])
+	end
+end
 
 local function autocomplete()
 	dcd.registerImages()
@@ -79,7 +139,8 @@ keys.dmd = {
 	['cH'] = {dcd.showDoc},
 	['down'] = {dcd.cycleCalltips, 1},
 	['up'] = {dcd.cycleCalltips, -1},
-	['cG'] = {dcd.gotoDeclaration}
+	['cG'] = {dcd.gotoDeclaration},
+	['cM'] = {symbolIndex}
 }
 
 local snippets = _G.snippets
