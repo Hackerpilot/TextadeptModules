@@ -95,7 +95,7 @@ local function symbolIndex()
 	local lineDict = {}
 	for line in r:gmatch("(.-)\n") do
 		if not line:match("^!") then
-			local name, file, lineNumber, tagType, meta = line:match("(%w+)\t([%w/_ ]+)\t(%d+);\"\t(%w)\t?(.*)")
+			local name, file, lineNumber, tagType, meta = line:match("([%w_]+)\t([%w/_ ]+)\t(%d+);\"\t(%w)\t?(.*)")
 			table.insert(symbolList, name)
 			table.insert(symbolList, expandCtagsType(tagType))
 			table.insert(symbolList, expandContext(meta))
@@ -106,7 +106,7 @@ local function symbolIndex()
 	end
 	local button, i = ui.dialogs.filteredlist{
 		title = "Go to symbol",
-		columns = {"name", "type", "context", "line"},
+		columns = {"Name", "Type", "Context", "Line"},
 		items = symbolList
 	}
 	if i ~= nil then
