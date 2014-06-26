@@ -93,10 +93,6 @@ keys["*"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false e
 keys["+"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else toggle_comment("+") end end}
 keys['f9'] = reset
 
-if not _G.NCURSES then
-keys.cq = nil
-end
-
 -- Insert unicode arrow characters
 keys.ac = {
 	["right"] = {function() buffer:add_text("→") end},
@@ -155,7 +151,6 @@ keys.cj = _M.common.multiedit.select_all_occurences
 
 keys.ch = textadept.editing.highlight_word
 keys.cg = textadept.editing.goto_line
-keys.cH = textadept.adeptsense.show_documentation
 
 keys.cO = function ()
 	local location
@@ -206,5 +201,11 @@ keys["c,"] = commaSeparete
 keys['cD'] = {textadept.editing.filter_through, 'ddemangle'}
 
 --ui.set_theme('IFR')
-ui.set_theme('eigengrau-solar')
---ui.set_theme('eigengrau-lunar')
+--ui.set_theme('eigengrau-solar')
+if not _G.CURSES then
+	ui.set_theme('eigengrau-lunar')
+end
+
+if not _G.CURSES then
+	keys.cq = nil
+end
