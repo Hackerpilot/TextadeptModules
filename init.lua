@@ -58,8 +58,24 @@ keys['csleft'] = {buffer.word_part_left_extend, buffer}
 keys['csright'] = {buffer.word_part_right_extend, buffer}
 keys['csup'] = {buffer.line_up_extend, buffer}
 keys['csdown'] = {buffer.line_down_extend, buffer}
-keys['c\b'] = function() buffer:word_part_left_extend() buffer:delete_back() end
-keys['cdel'] = function() buffer:word_part_right_extend() buffer:delete_back() end
+keys['c\b'] = function()
+	buffer:begin_undo_action()
+	for i = 1, buffer.selections do
+		buffer:rotate_selection()
+		buffer:word_part_left_extend()
+		buffer:delete_back()
+	end
+	buffer:end_undo_action()
+end
+keys['cdel'] = function()
+	buffer:begin_undo_action()
+	for i = 1, buffer.selections do
+		buffer:rotate_selection()
+		buffer:word_part_right_extend()
+		buffer:delete_back()
+	end
+	buffer:end_undo_action()
+end
 
 -- Buffer list
 keys.cm = ui.switch_buffer
@@ -100,6 +116,9 @@ keys.ac = {
 	["left"] = {function() buffer:add_text("←") end},
 	["down"] = {function() buffer:add_text("↓") end},
 }
+
+keys["aright"] = function() ui.goto_view(1, true) end
+keys["aleft"] = function() ui.goto_view(-1, true) end
 
 function goto_nearest_occurrence(reverse)
 	local buffer = buffer
