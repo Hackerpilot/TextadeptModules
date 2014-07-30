@@ -218,6 +218,7 @@ end
 keys["c,"] = commaSeparete
 
 keys['cD'] = {textadept.editing.filter_through, 'ddemangle'}
+keys['ct'] = {textadept.editing.select_word}
 
 --ui.set_theme('IFR')
 --ui.set_theme('eigengrau-solar')
