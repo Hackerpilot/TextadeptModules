@@ -3,13 +3,17 @@ local c = _SCINTILLA.constants
 
 buffer:set_x_caret_policy(1, 20) -- CARET_SLOP
 buffer:set_y_caret_policy(13, 1) -- CARET_SLOP | CARET_STRICT | CARET_EVEN
-buffer.margin_width_n[0] = 4 + 4 * -- line number margin
-buffer:text_width(c.STYLE_LINENUMBER, '9')
+if not _G.CURSES then
+	buffer.margin_width_n[0] = 4 + 4 *buffer:text_width(c.STYLE_LINENUMBER, '9')
+	buffer.margin_width_n[1] = 10
+	buffer.margin_width_n[2] = 10
+end
 
-buffer.margin_width_n[1] = 10
+
+
 
 buffer.margin_type_n[2] = c.MARGIN_SYMBOL
-buffer.margin_width_n[2] = 10
+
 buffer.margin_mask_n[2] = c.MASK_FOLDERS
 buffer.margin_sensitive_n[2] = true
 buffer:marker_define(c.MARKNUM_FOLDEROPEN, c.MARK_BOXMINUS)
@@ -54,7 +58,6 @@ buffer.indentation_guides = 3
 
 -- folding
 buffer.property['fold'] = '1'
-buffer.property['fold.by.indentation'] = '1'
 
 -- tabs and indentation
 buffer.tab_width = 4
