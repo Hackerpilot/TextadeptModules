@@ -118,7 +118,7 @@ local function autocomplete()
 	dcd.registerImages()
 	dcd.autocomplete()
 	if not buffer:auto_c_active() then
-		textadept.editing.autocomplete_word(keywords)
+		textadept.editing.autocomplete("word")
 	end
 end
 
