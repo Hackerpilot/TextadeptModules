@@ -21,7 +21,7 @@ textadept.run.error_patterns.dmd = {
 
 events.connect(events.CHAR_ADDED, function(ch)
 	if ch > 255 then return end
-	if string.char(ch) == '(' or string.char(ch) == '.' then
+	if string.char(ch) == '(' or string.char(ch) == '.' or string.char(ch) == ':' then
 		dcd.autocomplete(ch)
 	end
 end)
