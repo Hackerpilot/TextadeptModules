@@ -109,6 +109,10 @@ keys["*"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false e
 keys["+"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else toggle_comment("+") end end}
 keys['f9'] = reset
 
+if not _G.CURSES then
+keys.cq = nil
+end
+
 -- Insert unicode arrow characters
 keys.ac = {
 	["right"] = {function() buffer:add_text("→") end},
