@@ -52,10 +52,52 @@ end
 
 
 -- Cursor movement
-keys['cleft'] = {buffer.word_part_left, buffer}
-keys['cright'] = {buffer.word_part_right, buffer}
-keys['csleft'] = {buffer.word_part_left_extend, buffer}
-keys['csright'] = {buffer.word_part_right_extend, buffer}
+--keys['left'] = function()
+--	local p = buffer.caret_period
+--	buffer.caret_period = 0
+--	for i = 0, buffer.selections - 1 do
+--		buffer.selection_n_caret[i] = math.max(buffer.selection_n_caret[i] - 1, 0)
+--		buffer.selection_n_anchor[i] = buffer.selection_n_caret[i]
+--	end
+--	buffer.caret_period = p
+--end
+--keys['right'] = function()
+--	local p = buffer.caret_period
+--	buffer.caret_period = 0
+--	for i = 0, buffer.selections - 1 do
+--		buffer.selection_n_caret[i] = math.min(buffer.selection_n_caret[i] + 1, buffer.length)
+--		buffer.selection_n_anchor[i] = buffer.selection_n_caret[i]
+--	end
+--	buffer.caret_period = p
+--end
+keys['cleft'] = function()
+	for i = 1, buffer.selections do
+		buffer:rotate_selection()
+		buffer:word_part_left_extend()
+		buffer:swap_main_anchor_caret()
+		buffer:word_part_left_extend()
+	end
+end
+keys['cright'] = function()
+	for i = 1, buffer.selections do
+		buffer:rotate_selection()
+		buffer:word_part_right_extend()
+		buffer:swap_main_anchor_caret()
+		buffer:word_part_right_extend()
+	end
+end
+keys['csleft'] = function()
+	for i = 1, buffer.selections do
+		buffer:rotate_selection()
+		buffer:word_part_left_extend()
+	end
+end
+keys['csright'] = function()
+	for i = 1, buffer.selections do
+		buffer:rotate_selection()
+		buffer:word_part_right_extend()
+	end
+end
 keys['csup'] = {buffer.line_up_extend, buffer}
 keys['csdown'] = {buffer.line_down_extend, buffer}
 keys['c\b'] = function()
@@ -152,6 +194,7 @@ function goto_nearest_occurrence(reverse)
 		if buffer:search_in_target(word) == -1 then return end
 	end
 	buffer:set_sel(buffer.target_start, buffer.target_end)
+	buffer:vertical_centre_caret()
 end
 
 keys.ck = {goto_nearest_occurrence, false}
@@ -222,7 +265,13 @@ end
 keys["c,"] = commaSeparete
 
 keys['cD'] = {textadept.editing.filter_through, 'ddemangle'}
-keys['ct'] = {textadept.editing.select_word}
+keys['ct'] = function()
+	textadept.editing.select_word()
+	for i = 1, buffer.selections - 1 do
+		buffer:rotate_selection()
+	end
+	buffer:vertical_centre_caret()
+end
 
 --ui.set_theme('IFR')
 --ui.set_theme('eigengrau-solar')
