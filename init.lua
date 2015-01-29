@@ -1,5 +1,7 @@
+require 'editorconfig'
 require 'textadept'
-_M.common = require 'common'
+require('textredux').hijack()
+local common = require 'common'
 
 textadept.editing.STRIP_TRAILING_SPACES = true
 keys.LANGUAGE_MODULE_PREFIX = "cat"
@@ -201,7 +203,7 @@ keys.ck = {goto_nearest_occurrence, false}
 keys.cK = {goto_nearest_occurrence, true}
 
 function openTerminalHere()
-	terminalString = "xfce4-terminal"
+	terminalString = "gnome-terminal"
   pathString = "~"
   if buffer.filename then
     pathString = buffer.filename:match(".+/")
@@ -211,9 +213,9 @@ end
 
 keys.cT = openTerminalHere
 
-_M.common.multiedit = require "common.multiedit"
+common.multiedit = require "common.multiedit"
 
-keys.cj = _M.common.multiedit.select_all_occurences
+keys.cj = common.multiedit.select_all_occurences
 
 keys.ch = textadept.editing.highlight_word
 keys.cg = textadept.editing.goto_line
@@ -273,8 +275,12 @@ keys['ct'] = function()
 	buffer:vertical_centre_caret()
 end
 
---ui.set_theme('IFR')
---ui.set_theme('eigengrau-solar')
+keys['\n'] = function()
+	buffer:begin_undo_action()
+	buffer:new_line()
+	buffer:end_undo_action()
+end
+
 if not _G.CURSES then
 	ui.set_theme('eigengrau-lunar')
 end
@@ -282,3 +288,4 @@ end
 if not _G.CURSES then
 	keys.cq = nil
 end
+
