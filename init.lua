@@ -203,7 +203,7 @@ keys.ck = {goto_nearest_occurrence, false}
 keys.cK = {goto_nearest_occurrence, true}
 
 function openTerminalHere()
-	terminalString = "gnome-terminal"
+	terminalString = "xfce4-terminal"
   pathString = "~"
   if buffer.filename then
     pathString = buffer.filename:match(".+/")
