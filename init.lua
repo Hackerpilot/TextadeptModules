@@ -100,8 +100,34 @@ keys['csright'] = function()
 		buffer:word_part_right_extend()
 	end
 end
-keys['csup'] = {buffer.line_up_extend, buffer}
-keys['csdown'] = {buffer.line_down_extend, buffer}
+keys['cdown'] = function()
+	buffer:line_down()
+	buffer:line_down()
+	buffer:line_down()
+	buffer:line_down()
+	buffer:line_down()
+end
+keys['cup'] = function()
+	buffer:line_up()
+	buffer:line_up()
+	buffer:line_up()
+	buffer:line_up()
+	buffer:line_up()
+end
+keys['csup'] = function()
+	buffer:line_up_extend()
+	buffer:line_up_extend()
+	buffer:line_up_extend()
+	buffer:line_up_extend()
+	buffer:line_up_extend()
+end
+keys['csdown'] = function()
+	buffer:line_down_extend()
+	buffer:line_down_extend()
+	buffer:line_down_extend()
+	buffer:line_down_extend()
+	buffer:line_down_extend()
+end
 keys['c\b'] = function()
 	buffer:begin_undo_action()
 	for i = 1, buffer.selections do
