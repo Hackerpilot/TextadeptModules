@@ -307,6 +307,9 @@ keys['\n'] = function()
 	buffer:end_undo_action()
 end
 
+keys['am'] = {textadept.editing.match_brace}
+keys['aM'] = {textadept.editing.match_brace, true}
+
 if not _G.CURSES then
 	ui.set_theme('eigengrau-lunar')
 end
