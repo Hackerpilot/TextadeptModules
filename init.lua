@@ -147,6 +147,43 @@ keys['cdel'] = function()
 	buffer:end_undo_action()
 end
 
+keys['{'] = function()
+	local startPos = buffer.selection_start
+	local endPos = buffer.selection_end
+	if startPos == endPos then return false end
+	local startLine = buffer:line_from_position(startPos)
+	local endLine = buffer:line_from_position(endPos)
+	local i = 0
+	if buffer.use_tabs then i = 1 else i = buffer.indent end
+	local j = i * (endLine - startLine + 1)
+	buffer:begin_undo_action()
+	if buffer.char_at[startPos] == string.byte('{')
+			and buffer.char_at[endPos - 1] == string.byte('}') then
+		local b = buffer:line_from_position(startPos)
+		local a = buffer:line_from_position(endPos)
+		for l = startLine, endLine do
+			buffer.line_indentation[l] = buffer.line_indentation[l] - i
+		end
+		buffer:goto_line(a)
+		buffer:line_delete()
+		buffer:goto_line(b)
+		buffer:line_delete()
+	else
+		buffer:goto_pos(endPos)
+		buffer:new_line()
+		buffer:insert_text(buffer.current_pos, '}')
+		buffer:goto_pos(startPos)
+		buffer:insert_text(buffer.current_pos, '{')
+		buffer:goto_pos(buffer.current_pos + 1)
+		buffer:new_line()
+		for l = startLine, endLine do
+			buffer.line_indentation[l + 1] = buffer.line_indentation[l + 1] + i
+		end
+	end
+	buffer:line_end()
+	buffer:end_undo_action()
+end
+
 -- Buffer list
 keys.cm = ui.switch_buffer
 
@@ -173,7 +210,6 @@ local m_editing = textadept.editing
 keys['('] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("(", ")") end end}
 keys['"'] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose('"', '"') end end}
 keys['['] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("[", "]") end end}
-keys['{'] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("{", "}") end end}
 keys["'"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("'", "'") end end}
 keys["*"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else toggle_comment("*") end end}
 keys["+"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else toggle_comment("+") end end}
@@ -292,7 +328,6 @@ function commaSeparete()
 end
 keys["c,"] = commaSeparete
 
-keys['cD'] = {textadept.editing.filter_through, 'ddemangle'}
 keys['ct'] = function()
 	textadept.editing.select_word()
 	for i = 1, buffer.selections - 1 do
