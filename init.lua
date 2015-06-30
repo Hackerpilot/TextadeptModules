@@ -346,10 +346,11 @@ keys['am'] = {textadept.editing.match_brace}
 keys['aM'] = {textadept.editing.match_brace, true}
 
 if not _G.CURSES then
-	ui.set_theme('eigengrau-lunar')
+	ui.set_theme('eigengrau-hex')
 end
 
 if not _G.CURSES then
 	keys.cq = nil
 end
 
+textadept.file_types.extensions["tla"] = "tlaplus"
