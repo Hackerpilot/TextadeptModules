@@ -12,7 +12,7 @@ property['color.green'] =          0x628c62 -- diff lexer
 -- 0x%3%2%1 -- #%1%2%3
 property['color.c00'] = 0x161616 -- #161616
 property['color.c01'] = 0xBFBFBF -- #BFBFBF
-property['color.c02'] = 0x5656BF -- #BF5656
+property['color.c02'] = 0x7777d9 -- #BF6969
 property['color.c03'] = 0x4B4BA6 -- #A64B4B
 property['color.c04'] = 0x3F3F8C -- #8C3F3F
 property['color.c05'] = 0xBF7C9E -- #9E7CBF
@@ -38,7 +38,7 @@ end
 
 -- Token styles.
 property['style.nothing'] = ''
-property['style.class'] = 'fore:%(color.c02),bold'
+property['style.class'] = 'fore:%(color.c06),bold'
 property['style.comment'] = 'fore:%(color.c09)'
 property['style.constant'] = 'fore:%(color.c0d)'
 property['style.error'] = 'fore:%(color.c02),italics,bold,underline'
@@ -103,7 +103,7 @@ buffer.marker_fore[c.MARKNUM_FOLDERMIDTAIL] = property_int['color.c08']
 buffer.marker_back[c.MARKNUM_FOLDERMIDTAIL] = property_int['color.c09']
 
 -- Long Lines.
-buffer.edge_colour = property_int['color.edge']
+buffer.edge_colour = property_int['color.c08']
 
 buffer.indic_fore[textadept.editing.INDIC_HIGHLIGHT] = 0xBF8D7C
 buffer.indic_alpha[textadept.editing.INDIC_HIGHLIGHT] = 128
