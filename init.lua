@@ -275,10 +275,6 @@ end
 
 keys.cT = openTerminalHere
 
-common.multiedit = require "common.multiedit"
-
-keys.cj = common.multiedit.select_all_occurences
-
 keys.ch = textadept.editing.highlight_word
 keys.cg = textadept.editing.goto_line
 
@@ -330,9 +326,11 @@ keys["c,"] = commaSeparete
 
 keys['ct'] = function()
 	textadept.editing.select_word()
-	for i = 1, buffer.selections - 1 do
-		buffer:rotate_selection()
-	end
+	buffer:vertical_centre_caret()
+end
+
+keys['cj'] = function()
+	textadept.editing.select_word(true)
 	buffer:vertical_centre_caret()
 end
 
