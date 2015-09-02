@@ -4,7 +4,6 @@ require('textredux').hijack()
 local common = require 'common'
 
 textadept.editing.STRIP_TRAILING_SPACES = true
-keys.LANGUAGE_MODULE_PREFIX = "cat"
 
 function get_sel_lines()
 	if #buffer.get_sel_text(buffer) == 0 then
@@ -52,54 +51,6 @@ keys.ce = function()
 	buffer:end_undo_action()
 end
 
-
--- Cursor movement
---keys['left'] = function()
---	local p = buffer.caret_period
---	buffer.caret_period = 0
---	for i = 0, buffer.selections - 1 do
---		buffer.selection_n_caret[i] = math.max(buffer.selection_n_caret[i] - 1, 0)
---		buffer.selection_n_anchor[i] = buffer.selection_n_caret[i]
---	end
---	buffer.caret_period = p
---end
---keys['right'] = function()
---	local p = buffer.caret_period
---	buffer.caret_period = 0
---	for i = 0, buffer.selections - 1 do
---		buffer.selection_n_caret[i] = math.min(buffer.selection_n_caret[i] + 1, buffer.length)
---		buffer.selection_n_anchor[i] = buffer.selection_n_caret[i]
---	end
---	buffer.caret_period = p
---end
-keys['cleft'] = function()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_left_extend()
-		buffer:swap_main_anchor_caret()
-		buffer:word_part_left_extend()
-	end
-end
-keys['cright'] = function()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_right_extend()
-		buffer:swap_main_anchor_caret()
-		buffer:word_part_right_extend()
-	end
-end
-keys['csleft'] = function()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_left_extend()
-	end
-end
-keys['csright'] = function()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_right_extend()
-	end
-end
 keys['cdown'] = function()
 	buffer:line_down()
 	buffer:line_down()
@@ -154,7 +105,7 @@ keys['{'] = function()
 	local startLine = buffer:line_from_position(startPos)
 	local endLine = buffer:line_from_position(endPos)
 	local i = 0
-	if buffer.use_tabs then i = 1 else i = buffer.indent end
+	if buffer.use_tabs then i = buffer.tab_width else i = buffer.indent end
 	local j = i * (endLine - startLine + 1)
 	buffer:begin_undo_action()
 	if buffer.char_at[startPos] == string.byte('{')
