@@ -43,6 +43,7 @@ buffer.multiple_selection = true
 buffer.multi_paste = 1
 buffer.additional_selection_typing = true
 buffer.additional_carets_visible = true
+buffer.selection_mode = 2
 
 -- wrapping
 buffer.wrap_visual_flags = 1

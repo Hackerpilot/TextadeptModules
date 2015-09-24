@@ -4,6 +4,7 @@ require('textredux').hijack()
 local common = require 'common'
 
 textadept.editing.STRIP_TRAILING_SPACES = true
+keys.LANGUAGE_MODULE_PREFIX = "cat"
 
 function get_sel_lines()
 	if #buffer.get_sel_text(buffer) == 0 then
@@ -51,6 +52,22 @@ keys.ce = function()
 	buffer:end_undo_action()
 end
 
+keys['cleft'] = function()
+	buffer:word_part_left()
+end
+
+keys['cright'] = function()
+	buffer:word_part_right()
+end
+
+keys['csleft'] = function()
+	buffer:word_part_left_extend()
+end
+
+keys['csright'] = function()
+	buffer:word_part_right_extend()
+end
+
 keys['cdown'] = function()
 	buffer:line_down()
 	buffer:line_down()
@@ -58,6 +75,7 @@ keys['cdown'] = function()
 	buffer:line_down()
 	buffer:line_down()
 end
+
 keys['cup'] = function()
 	buffer:line_up()
 	buffer:line_up()
@@ -65,6 +83,7 @@ keys['cup'] = function()
 	buffer:line_up()
 	buffer:line_up()
 end
+
 keys['csup'] = function()
 	buffer:line_up_extend()
 	buffer:line_up_extend()
@@ -72,6 +91,7 @@ keys['csup'] = function()
 	buffer:line_up_extend()
 	buffer:line_up_extend()
 end
+
 keys['csdown'] = function()
 	buffer:line_down_extend()
 	buffer:line_down_extend()
@@ -79,23 +99,15 @@ keys['csdown'] = function()
 	buffer:line_down_extend()
 	buffer:line_down_extend()
 end
+
 keys['c\b'] = function()
-	buffer:begin_undo_action()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_left_extend()
-		buffer:delete_back()
-	end
-	buffer:end_undo_action()
+	buffer:word_part_left_extend()
+	buffer:delete_back()
 end
+
 keys['cdel'] = function()
-	buffer:begin_undo_action()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_right_extend()
-		buffer:delete_back()
-	end
-	buffer:end_undo_action()
+	buffer:word_part_right_extend()
+	buffer:delete_back()
 end
 
 keys['{'] = function()
