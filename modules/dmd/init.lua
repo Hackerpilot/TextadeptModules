@@ -253,7 +253,7 @@ if type(snippets) == 'table' then
 {
 	%0
 }]],
-		main = [[void main(string[] args)
+		main = [[void main()
 {
 	%0
 }]],
