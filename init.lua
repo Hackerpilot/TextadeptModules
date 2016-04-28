@@ -1,5 +1,4 @@
 require 'editorconfig'
-require 'textadept'
 require('textredux').hijack()
 local common = require 'common'
 
@@ -158,15 +157,21 @@ keys.caB = {m_bookmarks.goto_mark, false}
 
 -- Editing
 local function toggle_comment(char)
-	local text = buffer:get_sel_text()
-	if #text > 0 then
-		first = text:match("/%"..char.."(.-)%"..char.."/")
-		if first == nil then
-			buffer:replace_sel("/"..char..text..char.."/")
-		else
-			buffer:replace_sel(first)
+	buffer:begin_undo_action()
+	for i = 0,  buffer.selections - 1 do
+		buffer:set_target_range(buffer.selection_n_start[i],
+			buffer.selection_n_end[i])
+		local text = buffer.target_text
+		if #text > 0 then
+			first = text:match("/%"..char.."(.-)%"..char.."/")
+			if first == nil then
+				buffer:replace_target("/"..char..text..char.."/")
+			else
+				buffer:replace_target(first)
+			end
 		end
 	end
+	buffer:end_undo_action()
 end
 
 local m_editing = textadept.editing
@@ -236,7 +241,7 @@ function openTerminalHere()
   io.popen(terminalString.." --working-directory="..pathString.." &")
 end
 
-keys.cT = openTerminalHere
+keys.cat = openTerminalHere
 
 keys.ch = textadept.editing.highlight_word
 keys.cg = textadept.editing.goto_line
@@ -292,6 +297,11 @@ keys['ct'] = function()
 	buffer:vertical_centre_caret()
 end
 
+keys['cT'] = function()
+	buffer:drop_selection_n(buffer.selections - 1)
+	buffer:vertical_centre_caret()
+end
+
 keys['cj'] = function()
 	textadept.editing.select_word(true)
 	buffer:vertical_centre_caret()
@@ -307,7 +317,7 @@ keys['am'] = {textadept.editing.match_brace}
 keys['aM'] = {textadept.editing.match_brace, true}
 
 if not _G.CURSES then
-	ui.set_theme('eigengrau-emerald')
+	ui.set_theme('eigengrau-lunar')
 end
 
 if not _G.CURSES then
