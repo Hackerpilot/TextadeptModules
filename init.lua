@@ -1,5 +1,6 @@
-require 'textadept'
-_M.common = require 'common'
+require 'editorconfig'
+require('textredux').hijack()
+local common = require 'common'
 
 textadept.editing.STRIP_TRAILING_SPACES = true
 keys.LANGUAGE_MODULE_PREFIX = "cat"
@@ -50,72 +51,98 @@ keys.ce = function()
 	buffer:end_undo_action()
 end
 
-
--- Cursor movement
---keys['left'] = function()
---	local p = buffer.caret_period
---	buffer.caret_period = 0
---	for i = 0, buffer.selections - 1 do
---		buffer.selection_n_caret[i] = math.max(buffer.selection_n_caret[i] - 1, 0)
---		buffer.selection_n_anchor[i] = buffer.selection_n_caret[i]
---	end
---	buffer.caret_period = p
---end
---keys['right'] = function()
---	local p = buffer.caret_period
---	buffer.caret_period = 0
---	for i = 0, buffer.selections - 1 do
---		buffer.selection_n_caret[i] = math.min(buffer.selection_n_caret[i] + 1, buffer.length)
---		buffer.selection_n_anchor[i] = buffer.selection_n_caret[i]
---	end
---	buffer.caret_period = p
---end
 keys['cleft'] = function()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_left_extend()
-		buffer:swap_main_anchor_caret()
-		buffer:word_part_left_extend()
-	end
+	buffer:word_part_left()
 end
+
 keys['cright'] = function()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_right_extend()
-		buffer:swap_main_anchor_caret()
-		buffer:word_part_right_extend()
-	end
+	buffer:word_part_right()
 end
+
 keys['csleft'] = function()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_left_extend()
-	end
+	buffer:word_part_left_extend()
 end
+
 keys['csright'] = function()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_right_extend()
-	end
+	buffer:word_part_right_extend()
 end
-keys['csup'] = {buffer.line_up_extend, buffer}
-keys['csdown'] = {buffer.line_down_extend, buffer}
+
+keys['cdown'] = function()
+	buffer:line_down()
+	buffer:line_down()
+	buffer:line_down()
+	buffer:line_down()
+	buffer:line_down()
+end
+
+keys['cup'] = function()
+	buffer:line_up()
+	buffer:line_up()
+	buffer:line_up()
+	buffer:line_up()
+	buffer:line_up()
+end
+
+keys['csup'] = function()
+	buffer:line_up_extend()
+	buffer:line_up_extend()
+	buffer:line_up_extend()
+	buffer:line_up_extend()
+	buffer:line_up_extend()
+end
+
+keys['csdown'] = function()
+	buffer:line_down_extend()
+	buffer:line_down_extend()
+	buffer:line_down_extend()
+	buffer:line_down_extend()
+	buffer:line_down_extend()
+end
+
 keys['c\b'] = function()
-	buffer:begin_undo_action()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_left_extend()
-		buffer:delete_back()
-	end
-	buffer:end_undo_action()
+	buffer:word_part_left_extend()
+	buffer:delete_back()
 end
+
 keys['cdel'] = function()
+	buffer:word_part_right_extend()
+	buffer:delete_back()
+end
+
+keys['{'] = function()
+	local startPos = buffer.selection_start
+	local endPos = buffer.selection_end
+	if startPos == endPos then return false end
+	local startLine = buffer:line_from_position(startPos)
+	local endLine = buffer:line_from_position(endPos)
+	local i = 0
+	if buffer.use_tabs then i = buffer.tab_width else i = buffer.indent end
+	local j = i * (endLine - startLine + 1)
 	buffer:begin_undo_action()
-	for i = 1, buffer.selections do
-		buffer:rotate_selection()
-		buffer:word_part_right_extend()
-		buffer:delete_back()
+	if buffer.char_at[startPos] == string.byte('{')
+			and buffer.char_at[endPos - 1] == string.byte('}') then
+		local b = buffer:line_from_position(startPos)
+		local a = buffer:line_from_position(endPos)
+		for l = startLine, endLine do
+			buffer.line_indentation[l] = buffer.line_indentation[l] - i
+		end
+		buffer:goto_line(a)
+		buffer:line_delete()
+		buffer:goto_line(b)
+		buffer:line_delete()
+	else
+		buffer:goto_pos(endPos)
+		buffer:new_line()
+		buffer:insert_text(buffer.current_pos, '}')
+		buffer:goto_pos(startPos)
+		buffer:insert_text(buffer.current_pos, '{')
+		buffer:goto_pos(buffer.current_pos + 1)
+		buffer:new_line()
+		for l = startLine, endLine do
+			buffer.line_indentation[l + 1] = buffer.line_indentation[l + 1] + i
+		end
 	end
+	buffer:line_end()
 	buffer:end_undo_action()
 end
 
@@ -130,22 +157,27 @@ keys.caB = {m_bookmarks.goto_mark, false}
 
 -- Editing
 local function toggle_comment(char)
-	local text = buffer:get_sel_text()
-	if #text > 0 then
-		first = text:match("/%"..char.."(.-)%"..char.."/")
-		if first == nil then
-			buffer:replace_sel("/"..char..text..char.."/")
-		else
-			buffer:replace_sel(first)
+	buffer:begin_undo_action()
+	for i = 0,  buffer.selections - 1 do
+		buffer:set_target_range(buffer.selection_n_start[i],
+			buffer.selection_n_end[i])
+		local text = buffer.target_text
+		if #text > 0 then
+			first = text:match("/%"..char.."(.-)%"..char.."/")
+			if first == nil then
+				buffer:replace_target("/"..char..text..char.."/")
+			else
+				buffer:replace_target(first)
+			end
 		end
 	end
+	buffer:end_undo_action()
 end
 
 local m_editing = textadept.editing
 keys['('] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("(", ")") end end}
 keys['"'] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose('"', '"') end end}
 keys['['] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("[", "]") end end}
-keys['{'] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("{", "}") end end}
 keys["'"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("'", "'") end end}
 keys["*"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else toggle_comment("*") end end}
 keys["+"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else toggle_comment("+") end end}
@@ -209,11 +241,7 @@ function openTerminalHere()
   io.popen(terminalString.." --working-directory="..pathString.." &")
 end
 
-keys.cT = openTerminalHere
-
-_M.common.multiedit = require "common.multiedit"
-
-keys.cj = _M.common.multiedit.select_all_occurences
+keys.cat = openTerminalHere
 
 keys.ch = textadept.editing.highlight_word
 keys.cg = textadept.editing.goto_line
@@ -264,17 +292,30 @@ function commaSeparete()
 end
 keys["c,"] = commaSeparete
 
-keys['cD'] = {textadept.editing.filter_through, 'ddemangle'}
 keys['ct'] = function()
 	textadept.editing.select_word()
-	for i = 1, buffer.selections - 1 do
-		buffer:rotate_selection()
-	end
 	buffer:vertical_centre_caret()
 end
 
---ui.set_theme('IFR')
---ui.set_theme('eigengrau-solar')
+keys['cT'] = function()
+	buffer:drop_selection_n(buffer.selections - 1)
+	buffer:vertical_centre_caret()
+end
+
+keys['cj'] = function()
+	textadept.editing.select_word(true)
+	buffer:vertical_centre_caret()
+end
+
+keys['\n'] = function()
+	buffer:begin_undo_action()
+	buffer:new_line()
+	buffer:end_undo_action()
+end
+
+keys['am'] = {textadept.editing.match_brace}
+keys['aM'] = {textadept.editing.match_brace, true}
+
 if not _G.CURSES then
 	ui.set_theme('eigengrau-lunar')
 end
@@ -282,3 +323,7 @@ end
 if not _G.CURSES then
 	keys.cq = nil
 end
+
+textadept.file_types.extensions["tla"] = "tlaplus"
+
+ui.tabs = false
