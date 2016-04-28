@@ -307,7 +307,7 @@ keys['am'] = {textadept.editing.match_brace}
 keys['aM'] = {textadept.editing.match_brace, true}
 
 if not _G.CURSES then
-	ui.set_theme('eigengrau-hex')
+	ui.set_theme('eigengrau-emerald')
 end
 
 if not _G.CURSES then
@@ -315,3 +315,21 @@ if not _G.CURSES then
 end
 
 textadept.file_types.extensions["tla"] = "tlaplus"
+textadept.file_types.extensions["tach"] = "tachikoma"
+textadept.file_types.extensions["ll"] = "llvm"
+
+-- No tabs
+ui.tabs = false
+
+-- adjust line number margin on zoom
+events.connect('SCN', function(n)
+	if n.code == _SCINTILLA.constants.SCN_ZOOM then
+		local buffer = buffer
+		local width = #(buffer.line_count..'')
+		width = width > 4 and width or 4
+		buffer.margin_width_n[0] = 4 + width *
+			buffer:text_width(_SCINTILLA.constants.STYLE_LINENUMBER, '9')
+	end
+end)
+
+
