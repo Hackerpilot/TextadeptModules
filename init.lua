@@ -11,7 +11,7 @@ textadept.file_types.extensions["sml"] = "sml"
 textadept.editing.strip_trailing_spaces = true
 ui.tabs = false
 if not _G.CURSES then
-	ui.set_theme('eigengrau-lunar')
+	ui.set_theme('eigengrau-solar')
 end
 
 
