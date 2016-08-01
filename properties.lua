@@ -4,14 +4,13 @@ local c = _SCINTILLA.constants
 buffer:set_x_caret_policy(1, 20) -- CARET_SLOP
 buffer:set_y_caret_policy(13, 5) -- CARET_SLOP | CARET_STRICT | CARET_EVEN
 if not _G.CURSES then
-	buffer.margin_width_n[0] = 4 + 4 *buffer:text_width(c.STYLE_LINENUMBER, '9')
-	buffer.margin_width_n[1] = 10
+	buffer.margin_width_n[0] = 4 + 4 * buffer:text_width(c.STYLE_LINENUMBER, '9')
+	buffer.margin_width_n[1] = 14
 	buffer.margin_width_n[2] = 10
 end
 
 
 buffer.margin_type_n[2] = c.MARGIN_SYMBOL
-
 buffer.margin_mask_n[2] = c.MASK_FOLDERS
 buffer.margin_sensitive_n[2] = true
 buffer:marker_define(c.MARKNUM_FOLDEROPEN, c.MARK_BOXMINUS)
@@ -21,7 +20,7 @@ buffer:marker_define(c.MARKNUM_FOLDERTAIL, c.MARK_LCORNERCURVE)
 buffer:marker_define(c.MARKNUM_FOLDEREND, c.MARK_BOXPLUSCONNECTED)
 buffer:marker_define(c.MARKNUM_FOLDEROPENMID, c.MARK_BOXMINUSCONNECTED)
 buffer:marker_define(c.MARKNUM_FOLDERMIDTAIL, c.MARK_TCORNER)
-buffer:marker_define(textadept.bookmarks.MARK_BOOKMARK, c.MARK_CIRCLE)
+buffer:marker_define(textadept.bookmarks.MARK_BOOKMARK, c.MARK_BOOKMARK)
 
 -- line length marker
 buffer.edge_column = 80
