@@ -325,5 +325,6 @@ if not _G.CURSES then
 end
 
 textadept.file_types.extensions["tla"] = "tlaplus"
+textadept.file_types.extensions["tach"] = "tachikoma"
 
 ui.tabs = false

@@ -34,7 +34,8 @@ property['color.selection_back'] = 0xc4acac
 property['color.edge'] =           0x382b2b
 
 -- Default font.
-property['font'], property['fontsize'] = 'DejaVu Sans Mono', 10
+property['font'], property['fontsize'] = 'Fira Code', 11
+--property['font'], property['fontsize'] = 'DejaVu Sans Mono', 10
 --property['font'], property['fontsize'] = 'Source Code Pro', 10
 if WIN32 then
   property['font'] = 'Consolas'

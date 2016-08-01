@@ -28,8 +28,9 @@ property['color.c0e'] = 0x7AA66C -- #6CA67A
 property['color.c0f'] = 0x678C5B -- #5B8C67
 
 -- Default font.
-property['font'], property['fontsize'] = 'DejaVu Sans Mono', 10
+--property['font'], property['fontsize'] = 'DejaVu Sans Mono', 10
 --property['font'], property['fontsize'] = 'Source Code Pro', 10
+property['font'], property['fontsize'] = 'FiraCode', 10
 if WIN32 then
   property['font'] = 'Consolas'
 elseif OSX then
