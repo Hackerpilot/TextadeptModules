@@ -1,11 +1,25 @@
 require 'editorconfig'
 require('textredux').hijack()
-local common = require 'common'
 
-textadept.editing.STRIP_TRAILING_SPACES = true
-keys.LANGUAGE_MODULE_PREFIX = "cat"
+-------------------------------------------------------------------------------
+-- Settings
+-------------------------------------------------------------------------------
 
-function get_sel_lines()
+textadept.file_types.extensions["tla"] = "tlaplus"
+textadept.file_types.extensions["tach"] = "tachikoma"
+textadept.file_types.extensions["sml"] = "sml"
+textadept.editing.strip_trailing_spaces = true
+ui.tabs = false
+if not _G.CURSES then
+	ui.set_theme('eigengrau-lunar')
+end
+
+
+-------------------------------------------------------------------------------
+-- Key bindings
+-------------------------------------------------------------------------------
+
+function getSelectedLineRange()
 	if #buffer.get_sel_text(buffer) == 0 then
 		return buffer:line_from_position(buffer.current_pos),
 			buffer:line_from_position(buffer.current_pos)
@@ -22,9 +36,8 @@ end
 -- Deletes the currently selected lines
 keys.cl = function()
 	buffer:begin_undo_action()
-	local startLine, endLine = get_sel_lines()
+	local startLine, endLine = getSelectedLineRange()
 	if buffer.current_pos == buffer.selection_end then
-		buffer:goto_line(startLine)
 	end
 	for i = startLine, endLine do
 		buffer:home()
@@ -38,16 +51,6 @@ keys.cl = function()
 			buffer:line_down()
 		end
 	end
-	buffer:end_undo_action()
-end
-
--- Places cursors on both sides of the selected text
-keys.ce = function()
-	buffer:begin_undo_action()
-	local start = buffer.selection_start
-	local sel_end = buffer.selection_end
-	buffer:set_selection(sel_end, sel_end)
-	buffer:add_selection(start, start)
 	buffer:end_undo_action()
 end
 
@@ -151,11 +154,43 @@ keys.cm = ui.switch_buffer
 
 -- Bookmarks
 local m_bookmarks = textadept.bookmarks
-keys.cb = {m_bookmarks.toggle}
-keys.cB = {m_bookmarks.goto_mark, true}
-keys.caB = {m_bookmarks.goto_mark, false}
+keys.cb = m_bookmarks.toggle
+keys.cB = function() m_bookmarks.goto_mark(true) end
+keys.caB = function() m_bookmarks.goto_mark(false) end
 
--- Editing
+local m_editing = textadept.editing
+keys['('] = function()
+	if #buffer.get_sel_text(buffer) == 0 then
+		return false
+	else
+		m_editing.enclose("(", ")")
+	end
+end
+
+keys['"'] = function()
+	if #buffer.get_sel_text(buffer) == 0 then
+		return false
+	else
+		m_editing.enclose('"', '"')
+	end
+end
+
+keys['['] = function()
+	if #buffer.get_sel_text(buffer) == 0 then
+		return false
+	else
+		m_editing.enclose("[", "]")
+	end
+end
+
+keys["'"] = function()
+	if #buffer.get_sel_text(buffer) == 0 then
+		return false
+	else
+		m_editing.enclose("'", "'")
+	end
+end
+
 local function toggle_comment(char)
 	buffer:begin_undo_action()
 	for i = 0,  buffer.selections - 1 do
@@ -174,26 +209,21 @@ local function toggle_comment(char)
 	buffer:end_undo_action()
 end
 
-local m_editing = textadept.editing
-keys['('] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("(", ")") end end}
-keys['"'] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose('"', '"') end end}
-keys['['] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("[", "]") end end}
-keys["'"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else m_editing.enclose("'", "'") end end}
-keys["*"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else toggle_comment("*") end end}
-keys["+"] = {function() if #buffer.get_sel_text(buffer) == 0 then return false else toggle_comment("+") end end}
-keys['f9'] = reset
-
-if not _G.CURSES then
-keys.cq = nil
+keys["*"] = function()
+	if #buffer.get_sel_text(buffer) == 0 then
+		return false
+	else
+		toggle_comment("*")
+	end
 end
 
--- Insert unicode arrow characters
-keys.ac = {
-	["right"] = {function() buffer:add_text("→") end},
-	["up"] = {function() buffer:add_text("↑") end},
-	["left"] = {function() buffer:add_text("←") end},
-	["down"] = {function() buffer:add_text("↓") end},
-}
+keys["+"] = function()
+	if #buffer.get_sel_text(buffer) == 0 then
+		return false
+	else
+		toggle_comment("+")
+	end
+end
 
 keys["aright"] = function() ui.goto_view(1, true) end
 keys["aleft"] = function() ui.goto_view(-1, true) end
@@ -229,68 +259,51 @@ function goto_nearest_occurrence(reverse)
 	buffer:vertical_centre_caret()
 end
 
-keys.ck = {goto_nearest_occurrence, false}
-keys.cK = {goto_nearest_occurrence, true}
+keys.ck = function() goto_nearest_occurrence(false) end
+keys.cK = function() goto_nearest_occurrence(true) end
 
-function openTerminalHere()
-	terminalString = "xfce4-terminal"
-  pathString = "~"
-  if buffer.filename then
-    pathString = buffer.filename:match(".+/")
-  end
-  io.popen(terminalString.." --working-directory="..pathString.." &")
+if not _G.CURSES then
+	keys.cq = nil
 end
+keys.cW = nil
 
-keys.cat = openTerminalHere
+keys.cat = function()
+	terminalString = "xfce4-terminal"
+	pathString = "~"
+	if buffer.filename then
+		pathString = buffer.filename:match(".+/")
+	end
+	io.popen(terminalString.." --working-directory="..pathString.." &")
+end
 
 keys.ch = textadept.editing.highlight_word
 keys.cg = textadept.editing.goto_line
 
-keys.cO = function ()
-	local location
-	if buffer.filename then
-		if WIN32 then
-			location = buffer.filename:match(".+\\")
-		else
-			location = buffer.filename:match(".+/")
-		end
-	else
-		location = os.getenv("PWD")
-	end
-	_G.io.snapopen(location)
-end
-
-keys.cW = nil
-
-function quoteAndComma()
+keys.cC = function()
 	local text = buffer:get_sel_text()
 	text = text:gsub("([^\n]+)$", "\"%1\"")
 	text = text:gsub("%s*([^\n]+)(\r?\n)", "\"%1\",%2")
 	buffer:replace_sel(text)
 end
-keys.cC = quoteAndComma
 
-function itemize()
+keys.cI = function()
 	local text = buffer:get_sel_text()
 	text = text:gsub("([^\n]+)$", "<li>%1</li>")
 	text = text:gsub("%s*([^\n]+)(\r?\n)", "<li>%1</li>%2")
 	buffer:replace_sel(text)
 end
-keys.cI = itemize
 
-function blockComment()
+keys["c?"] = function()
 	local text = buffer:get_sel_text()
 	local replacement = "/*\n * " .. text:gsub("\n", "\n * ") .. "\n */"
 	buffer:replace_sel(replacement)
 end
-keys["c?"] = blockComment
 
-function commaSeparete()
+keys["c,"] = function()
 	local text = buffer:get_sel_text()
 	local replacement = text:gsub("([%w.]+)", "%1,")
 	buffer:replace_sel(replacement)
 end
-keys["c,"] = commaSeparete
 
 keys['ct'] = function()
 	textadept.editing.select_word()
@@ -313,18 +326,12 @@ keys['\n'] = function()
 	buffer:end_undo_action()
 end
 
-keys['am'] = {textadept.editing.match_brace}
-keys['aM'] = {textadept.editing.match_brace, true}
+-- Insert unicode arrow characters
+keys.ac = {
+	["right"] = function() buffer:add_text("→") end,
+	["up"] = function() buffer:add_text("↑") end,
+	["left"] = function() buffer:add_text("←") end,
+	["down"] = function() buffer:add_text("↓") end,
+}
 
-if not _G.CURSES then
-	ui.set_theme('eigengrau-lunar')
-end
-
-if not _G.CURSES then
-	keys.cq = nil
-end
-
-textadept.file_types.extensions["tla"] = "tlaplus"
-textadept.file_types.extensions["tach"] = "tachikoma"
-
-ui.tabs = false
+keys['f9'] = reset
