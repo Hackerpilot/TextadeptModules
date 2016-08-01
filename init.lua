@@ -327,6 +327,7 @@ end
 textadept.file_types.extensions["tla"] = "tlaplus"
 textadept.file_types.extensions["tach"] = "tachikoma"
 textadept.file_types.extensions["ll"] = "llvm"
+textadept.file_types.extensions["sml"] = "sml"
 
 -- No tabs
 ui.tabs = false
