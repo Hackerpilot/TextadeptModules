@@ -9,6 +9,7 @@ textadept.file_types.extensions["tla"] = "tlaplus"
 textadept.file_types.extensions["tach"] = "tachikoma"
 textadept.file_types.extensions["ll"] = "llvm"
 textadept.file_types.extensions["sml"] = "sml"
+textadept.editing.comment_string.sml = '(*|*)'
 textadept.editing.strip_trailing_spaces = true
 ui.tabs = false
 if not _G.CURSES then
