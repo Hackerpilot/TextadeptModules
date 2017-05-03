@@ -328,6 +328,44 @@ keys['\n'] = function()
 	buffer:end_undo_action()
 end
 
+local function bisectLeft()
+	local cp = math.min(buffer.current_pos, math.min(buffer.selection_start, buffer.selection_end))
+	local ln = buffer:line_from_position(cp)
+	local lineLength = buffer:line_length(ln)
+	local col = buffer.column[cp]
+	local beg = buffer.position_from_line(ln)
+	return math.max(beg, cp - (lineLength // 3))
+end
+
+keys['caleft'] = function()
+	buffer:goto_pos(bisectLeft())
+end
+
+local function bisectRight()
+	local cp = math.max(buffer.current_pos, math.max(buffer.selection_start, buffer.selection_end))
+	local ln = buffer:line_from_position(cp)
+	local lineLength = buffer:line_length(ln)
+	local col = buffer.column[cp]
+	local lineEnd = buffer.line_end_position[ln]
+	return math.min(lineEnd, cp + (lineLength // 3))
+end
+
+keys['caright'] = function()
+	buffer:goto_pos(bisectRight())
+end
+
+keys['casleft'] = function()
+	for i = math.min(buffer.selection_start, buffer.selection_end), bisectLeft(), -1 do
+		buffer:char_left_extend()
+	end
+end
+
+keys['casright'] = function()
+	for i = math.max(buffer.selection_start, buffer.selection_end), bisectRight() do
+		buffer:char_right_extend()
+	end
+end
+
 -- Insert unicode arrow characters
 keys.ac = {
 	["right"] = function() buffer:add_text("→") end,
