@@ -375,3 +375,58 @@ keys.ac = {
 }
 
 keys['f9'] = reset
+
+-- Horizontally align space-separated data.
+keys['f8'] = function()
+	for selIndex = 0, buffer.selections - 1 do
+		local startPos = math.min(buffer.selection_n_start[selIndex],
+			buffer.selection_n_end[selIndex])
+		local endPos = math.max(buffer.selection_n_start[selIndex],
+			buffer.selection_n_end[selIndex])
+		if startPos ~= endPos then
+			local text = buffer:get_sel_text()
+			local leadingWhitespace = {}
+			local words = {}
+			local maxWordLengths = {}
+			local lineCount = 0
+			for line in string.gmatch(text, "([^\n]+)") do
+				table.insert(words, {})
+				lineCount = lineCount + 1
+
+				local leading = string.match(line, "^(%s+)")
+				table.insert(leadingWhitespace, leading or "")
+				if leading ~= nil then
+					line = string.sub(line, string.len(leading))
+				end
+
+				local wordIndex = 1
+				for word in string.gmatch(line, " *([^%s]+)") do
+					table.insert(words[#words], word)
+					if wordIndex <= #maxWordLengths then
+						maxWordLengths[wordIndex] = math.max(
+							maxWordLengths[wordIndex], string.len(word))
+					else
+						maxWordLengths[wordIndex] = string.len(word)
+					end
+					wordIndex = wordIndex + 1
+				end
+			end
+			buffer:begin_undo_action()
+			buffer:delete_range(startPos, endPos - startPos)
+			buffer:goto_pos(startPos)
+
+			for i = 1, lineCount do
+				buffer:add_text(leadingWhitespace[i] or "")
+				for j, word in ipairs(words[i]) do
+					local paddingSpaceCount = maxWordLengths[j] - string.len(word) + 1
+					buffer:add_text(word)
+					if j + 1 <= #words[i] then
+						for k = 1, paddingSpaceCount do buffer:add_text(" ") end
+					end
+				end
+				if i < lineCount then buffer.add_text("\n") end
+			end
+			buffer:end_undo_action()
+		end
+	end
+end
