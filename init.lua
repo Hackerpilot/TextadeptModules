@@ -1,4 +1,4 @@
-require 'editorconfig'
+require('textadept.editing.editorconfig')
 require('textredux').hijack()
 
 -------------------------------------------------------------------------------
