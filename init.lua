@@ -13,7 +13,7 @@ textadept.editing.comment_string.sml = '(*|*)'
 textadept.editing.strip_trailing_spaces = true
 ui.tabs = false
 if not _G.CURSES then
-	ui.set_theme('eigengrau-solar')
+	ui.set_theme('eigengrau')
 end
 
 
