@@ -2,24 +2,25 @@ local buffer = buffer
 local property, property_int = buffer.property, buffer.property_int
 
 -- required colors
-property['color.yellow'] =         0x627e8c -- highlight color from editing.lua
-property['color.orange'] =         0x222222 -- highlight color from editing.lua
-property['color.red'] =            0x62628c -- diff lexer
-property['color.green'] =          0x628c62 -- diff lexer
+property['color.yellow']   = 0x627e8c -- highlight color from editing.lua
+property['color.orange']   = 0x222222 -- highlight color from editing.lua
+property['color.red']      = 0x62628c -- diff lexer
+property['color.green']    = 0x628c62 -- diff lexer
 
-property['color.base0'] = 0x1d1616
-property['color.base1'] = 0x4d4d4d
-property['color.base2'] = 0x808080
-property['color.base3'] = 0xe6e6e6
-property['color.base4'] = 0xcccccc
-property['color.teal1'] = 0xb3b374
-property['color.teal2'] = 0xbaba0a
-property['color.green1'] = 0x7ead79
-property['color.blue1'] = 0xad8a79
-property['color.red1'] = 0x4f4fc4
-property['color.red2'] = 0x666691
+property['color.base0']    = 0x1d1616
+property['color.base1']    = 0x4d4d4d
+property['color.base2']    = 0x808080
+property['color.base3']    = 0xe6e6e6
+property['color.base4']    = 0xcccccc
+property['color.teal1']    = 0xb3b374
+property['color.teal2']    = 0xbaba0a
+property['color.green1']   = 0x7ead79
+property['color.blue1']    = 0xcca38f
+property['color.red1']     = 0x4f4fc4
+property['color.orange1']  = 0x5682ba
+property['color.orange2']  = 0x3a84e0
 property['color.magenta1'] = 0xc489a4
-property['color.yellow1'] = 0x66bab2
+property['color.yellow1']  = 0x66bab2
 
 -- Default font.
 property['font'], property['fontsize'] = 'Fira Code', 11
@@ -32,34 +33,34 @@ elseif OSX then
 end
 
 -- Token styles.
-property['style.nothing'] = ''
-property['style.class'] = 'fore:%(color.teal2),bold'
-property['style.comment'] = 'fore:%(color.base2)'
-property['style.constant'] = 'fore:%(color.yellow1)'
-property['style.error'] = 'fore:%(color.red1),italics,bold,underline'
-property['style.function'] = 'fore:%(color.blue1)'
-property['style.keyword'] = 'fore:%(color.green1),bold'
-property['style.label'] = 'fore:%(color.base3)'
-property['style.number'] = 'fore:%(color.yellow1),bold'
-property['style.operator'] = 'fore:%(color.base3),bold'
-property['style.regex'] = 'fore:%(color.teal1)'
-property['style.string'] = 'fore:%(color.teal1)'
-property['style.preprocessor'] = 'fore:%(color.magenta1),bold'
-property['style.type'] = 'fore:%(color.red2),bold'
-property['style.variable'] = 'fore:%(color.base2),italic'
-property['style.whitespace'] = ''
-property['style.embedded'] = '%(style.tag),back:%(color.base2)'
-property['style.identifier'] = '%(style.nothing)'
+property['style.nothing']      = ''
+property['style.class']        = 'fore:%(color.yellow1)'
+property['style.comment']      = 'fore:%(color.base2),italics'
+property['style.constant']     = 'fore:%(color.yellow1),bold'
+property['style.error']        = 'fore:%(color.red1),italics,bold,underline'
+property['style.function']     = 'fore:%(color.blue1)'
+property['style.keyword']      = 'fore:%(color.orange2),bold'
+property['style.label']        = 'fore:%(color.base3)'
+property['style.number']       = 'fore:%(color.teal2)'
+property['style.operator']     = 'fore:%(color.base3),bold'
+property['style.regex']        = 'fore:%(color.teal1)'
+property['style.string']       = 'fore:%(color.teal1)'
+property['style.preprocessor'] = 'fore:%(color.magenta1)'
+property['style.type']         = 'fore:%(color.orange1),bold'
+property['style.variable']     = 'fore:%(color.base3),italics'
+property['style.whitespace']   = ''
+property['style.embedded']     = '%(style.tag),back:%(color.base2)'
+property['style.identifier']   = '%(style.nothing)'
 
 -- Predefined styles.
-property['style.default'] = 'font:%(font),size:%(fontsize),'..
-                            'fore:%(color.base4),back:%(color.base0)'
-property['style.linenumber'] = 'fore:%(color.base2),back:%(color.base0)'
-property['style.bracelight'] = 'fore:%(color.base2),back:%(color.green1),bold'
-property['style.bracebad'] = 'fore:%(color.text0),back:%(color.red1),bold'
+property['style.default']     = 'font:%(font),size:%(fontsize),'..
+                                'fore:%(color.base4),back:%(color.base0)'
+property['style.linenumber']  = 'fore:%(color.base2),back:%(color.base0)'
+property['style.bracelight']  = 'fore:%(color.base2),back:%(color.green1),bold'
+property['style.bracebad']    = 'fore:%(color.text0),back:%(color.red1),bold'
 property['style.controlchar'] = '%(style.nothing)'
-property['style.indentguide'] = 'fore:%(color.base2)'
-property['style.calltip'] = 'fore:%(color.base4),back:%(color.base0)'
+property['style.indentguide'] = 'fore:%(color.base1)'
+property['style.calltip']     = 'fore:%(color.base4),back:%(color.base0)'
 
 -- Multiple Selection and Virtual Space
 --buffer.additional_sel_alpha =
