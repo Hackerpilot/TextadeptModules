@@ -270,7 +270,7 @@ end
 keys.cW = nil
 
 keys.cat = function()
-	terminalString = "xfce4-terminal"
+	terminalString = "tilix"
 	pathString = "~"
 	if buffer.filename then
 		pathString = buffer.filename:match(".+/")

@@ -2,24 +2,24 @@ local buffer = buffer
 local property, property_int = buffer.property, buffer.property_int
 
 -- required colors
-property['color.yellow']   = 0x627e8c -- highlight color from editing.lua
+property['color.yellow']   = 0x66bab2 -- highlight color from editing.lua
 property['color.orange']   = 0x222222 -- highlight color from editing.lua
-property['color.red']      = 0x62628c -- diff lexer
-property['color.green']    = 0x628c62 -- diff lexer
+property['color.red']      = 0x6161c2 -- diff lexer
+property['color.green']    = 0x81cc81 -- diff lexer
 
 property['color.base0']    = 0x1d1616
-property['color.base1']    = 0x4d4d4d
-property['color.base2']    = 0x808080
-property['color.base3']    = 0xe6e6e6
-property['color.base4']    = 0xcccccc
-property['color.teal1']    = 0xb3b374
-property['color.teal2']    = 0xbaba0a
-property['color.green1']   = 0x7ead79
-property['color.blue1']    = 0xcca38f
-property['color.red1']     = 0x4f4fc4
-property['color.orange1']  = 0x5682ba
-property['color.orange2']  = 0x3a84e0
-property['color.magenta1'] = 0xc489a4
+property['color.base1']    = 0x544f4f
+property['color.base2']    = 0x8c8484
+property['color.base3']    = 0xc4b9b9
+property['color.base4']    = 0xf0e1e1
+property['color.blue1']    = 0xceb49b
+property['color.green1']   = 0x93cc93
+property['color.magenta1'] = 0xa680ce
+property['color.magenta2'] = 0xce86ce
+property['color.orange1']  = 0x6192c2
+property['color.red1']     = 0x6161c2
+property['color.teal1']    = 0xcece69
+property['color.teal2']    = 0x999900
 property['color.yellow1']  = 0x66bab2
 
 -- Default font.
@@ -36,10 +36,10 @@ end
 property['style.nothing']      = ''
 property['style.class']        = 'fore:%(color.yellow1)'
 property['style.comment']      = 'fore:%(color.base2),italics'
-property['style.constant']     = 'fore:%(color.yellow1),bold'
+property['style.constant']     = 'fore:%(color.magenta2),bold'
 property['style.error']        = 'fore:%(color.red1),italics,bold,underline'
 property['style.function']     = 'fore:%(color.blue1)'
-property['style.keyword']      = 'fore:%(color.orange2),bold'
+property['style.keyword']      = 'fore:%(color.green1),bold'
 property['style.label']        = 'fore:%(color.base3)'
 property['style.number']       = 'fore:%(color.teal2)'
 property['style.operator']     = 'fore:%(color.base3),bold'
