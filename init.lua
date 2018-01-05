@@ -22,6 +22,8 @@ end
 -- Key bindings
 -------------------------------------------------------------------------------
 
+keys.cr = nil
+
 function getSelectedLineRange()
 	if #buffer.get_sel_text(buffer) == 0 then
 		return buffer:line_from_position(buffer.current_pos),
@@ -269,6 +271,10 @@ if not _G.CURSES then
 	keys.cq = nil
 end
 keys.cW = nil
+keys['chome'] = function() return true end
+keys['cend'] = function() return true end
+keys['cshome'] = function() return true end
+keys['csend'] = function() return true end
 
 keys.cat = function()
 	terminalString = "tilix"
