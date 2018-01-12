@@ -69,11 +69,11 @@ property['style.calltip']     = 'fore:%(color.base4),back:%(color.base0)'
 --buffer.additional_caret_fore =
 
 -- Caret and Selection Styles.
-buffer:set_sel_fore(true, property_int['color.base2'])
-buffer:set_sel_back(true, property_int['color.base3'])
+buffer:set_sel_fore(true, property_int['color.base0'])
+buffer:set_sel_back(true, property_int['color.base2'])
 --buffer.sel_alpha =
 buffer.caret_fore = property_int['color.base4']
-buffer.caret_line_back = property_int['color.base2']
+buffer.caret_line_back = property_int['color.base3']
 buffer.caret_line_back_alpha = 32
 
 -- Fold Margin.
