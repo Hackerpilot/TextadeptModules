@@ -477,6 +477,7 @@ buffer.auto_c_max_height = 10
 if not WIN32 and not OSX then buffer.rectangular_selection_modifier = 8 end
 buffer.multiple_selection = true
 buffer.multi_paste = 1
+buffer.paste_reindents = true
 buffer.additional_selection_typing = true
 buffer.additional_carets_visible = true
 buffer.selection_mode = 2
