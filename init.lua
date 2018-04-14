@@ -14,7 +14,7 @@ textadept.editing.comment_string.sml = '(*|*)'
 textadept.editing.strip_trailing_spaces = true
 ui.tabs = false
 if not _G.CURSES then
-	buffer.set_theme('eigengrau')
+	buffer:set_theme('eigengrau')
 end
 
 
@@ -477,7 +477,7 @@ buffer.auto_c_max_height = 10
 if not WIN32 and not OSX then buffer.rectangular_selection_modifier = 8 end
 buffer.multiple_selection = true
 buffer.multi_paste = 1
-buffer.paste_reindents = true
+textadept.editing.paste_reindents = false
 buffer.additional_selection_typing = true
 buffer.additional_carets_visible = true
 buffer.selection_mode = 2
@@ -497,7 +497,7 @@ buffer.property['fold'] = '1'
 
 -- tabs and indentation
 buffer.tab_width = 4
-buffer.use_tabs = true
+buffer.use_tabs = false
 buffer.indent = 4
 buffer.tab_indents = true
 buffer.back_space_un_indents = true
