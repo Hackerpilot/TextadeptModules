@@ -66,11 +66,11 @@ keys['ctrl+right'] = function()
 	buffer:word_part_right()
 end
 
-keys['ctrl+sleft'] = function()
+keys['ctrl+shift+left'] = function()
 	buffer:word_part_left_extend()
 end
 
-keys['ctrl+sright'] = function()
+keys['ctrl+shift+right'] = function()
 	buffer:word_part_right_extend()
 end
 
@@ -154,13 +154,13 @@ keys['{'] = function()
 end
 
 -- Buffer list
-keys.cm = ui.switch_buffer
+keys['ctrl+m'] = ui.switch_buffer
 
 -- Bookmarks
 local m_bookmarks = textadept.bookmarks
 keys['ctrl+b'] = m_bookmarks.toggle
-keys['ctrl+shift+b'] = function() m_bookmarks.goto_mark(true) end
-keys['ctrl+shift+alt+b'] = function() m_bookmarks.goto_mark(false) end
+keys['ctrl+B'] = function() m_bookmarks.goto_mark(true) end
+keys['ctrl+alt+B'] = function() m_bookmarks.goto_mark(false) end
 
 local m_editing = textadept.editing
 keys['('] = function()
@@ -260,11 +260,11 @@ function goto_nearest_occurrence(reverse)
 		if buffer:search_in_target(word) == -1 then return end
 	end
 	buffer:set_sel(buffer.target_start, buffer.target_end)
-	view:vertical_centre_caret()
+	view:vertical_center_caret()
 end
 
 keys['ctrl+k'] = function() goto_nearest_occurrence(false) end
-keys['ctrl+shift+k'] = function() goto_nearest_occurrence(true) end
+keys['ctrl+K'] = function() goto_nearest_occurrence(true) end
 
 if not _G.CURSES then
 	keys.cq = nil
@@ -287,14 +287,14 @@ end
 keys['ctrl+h'] = textadept.editing.highlight_words
 keys['ctrl+g'] = textadept.editing.goto_line
 
-keys['ctrl+shift+c'] = function()
+keys['ctrl+C'] = function()
 	local text = buffer:get_sel_text()
 	text = text:gsub("([^\n]+)$", "\"%1\"")
 	text = text:gsub("%s*([^\n]+)(\r?\n)", "\"%1\",%2")
 	buffer:replace_sel(text)
 end
 
-keys['ctrl+shift+i'] = function()
+keys['ctrl+I'] = function()
 	local text = buffer:get_sel_text()
 	text = text:gsub("([^\n]+)$", "<li>%1</li>")
 	text = text:gsub("%s*([^\n]+)(\r?\n)", "<li>%1</li>%2")
@@ -318,7 +318,7 @@ keys['ctrl+t'] = function()
 	view:vertical_center_caret()
 end
 
-keys['ctrl+shift+t'] = function()
+keys['ctrl+T'] = function()
 	buffer:drop_selection_n(buffer.selections - 1)
 	view:vertical_center_caret()
 end
@@ -406,19 +406,6 @@ if not _G.CURSES then
 	view.margin_width_n[1] = 14
 	view.margin_width_n[2] = 10
 end
-
-
-view.margin_type_n[2] = view.MARGIN_SYMBOL
-view.margin_mask_n[2] = view.MASK_FOLDERS
-view.margin_sensitive_n[2] = true
-view:marker_define(c.MARKNUM_FOLDEROPEN, view.MARK_BOXMINUS)
-view:marker_define(c.MARKNUM_FOLDER, view.MARK_BOXPLUS)
-view:marker_define(c.MARKNUM_FOLDERSUB, view.MARK_VLINE)
-view:marker_define(c.MARKNUM_FOLDERTAIL, view.MARK_LCORNERCURVE)
-view:marker_define(c.MARKNUM_FOLDEREND, view.MARK_BOXPLUSCONNECTED)
-view:marker_define(c.MARKNUM_FOLDEROPENMID, view.MARK_BOXMINUSCONNECTED)
-view:marker_define(c.MARKNUM_FOLDERMIDTAIL, view.MARK_TCORNER)
-view:marker_define(textadept.view.MARK_BOOKMARK, view.MARK_BOOKMARK)
 
 -- line length marker
 view.edge_column = 80
