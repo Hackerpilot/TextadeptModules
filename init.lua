@@ -1,5 +1,5 @@
-require('textadept.editing.editorconfig')
-require('textredux').hijack()
+--require('textadept.editing.editorconfig')
+--require('textredux').hijack()
 local c = _SCINTILLA.constants
 
 -------------------------------------------------------------------------------
@@ -14,15 +14,14 @@ textadept.editing.comment_string.sml = '(*|*)'
 textadept.editing.strip_trailing_spaces = true
 ui.tabs = false
 if not _G.CURSES then
-	buffer:set_theme('eigengrau')
+	view:set_theme('eigengrau')
 end
-
 
 -------------------------------------------------------------------------------
 -- Key bindings
 -------------------------------------------------------------------------------
 
-keys.cr = nil
+keys['ctrl+r'] = nil
 
 function getSelectedLineRange()
 	if #buffer.get_sel_text(buffer) == 0 then
@@ -39,7 +38,7 @@ function getSelectedLineRange()
 end
 
 -- Deletes the currently selected lines
-keys.cl = function()
+keys['ctrl+l'] = function()
 	buffer:begin_undo_action()
 	local startLine, endLine = getSelectedLineRange()
 	if buffer.current_pos == buffer.selection_end then
@@ -59,23 +58,23 @@ keys.cl = function()
 	buffer:end_undo_action()
 end
 
-keys['cleft'] = function()
+keys['ctrl+left'] = function()
 	buffer:word_part_left()
 end
 
-keys['cright'] = function()
+keys['ctrl+right'] = function()
 	buffer:word_part_right()
 end
 
-keys['csleft'] = function()
+keys['ctrl+sleft'] = function()
 	buffer:word_part_left_extend()
 end
 
-keys['csright'] = function()
+keys['ctrl+sright'] = function()
 	buffer:word_part_right_extend()
 end
 
-keys['cdown'] = function()
+keys['ctrl+down'] = function()
 	buffer:line_down()
 	buffer:line_down()
 	buffer:line_down()
@@ -83,7 +82,7 @@ keys['cdown'] = function()
 	buffer:line_down()
 end
 
-keys['cup'] = function()
+keys['ctrl+up'] = function()
 	buffer:line_up()
 	buffer:line_up()
 	buffer:line_up()
@@ -91,7 +90,7 @@ keys['cup'] = function()
 	buffer:line_up()
 end
 
-keys['csup'] = function()
+keys['ctrl+shift+up'] = function()
 	buffer:line_up_extend()
 	buffer:line_up_extend()
 	buffer:line_up_extend()
@@ -99,7 +98,7 @@ keys['csup'] = function()
 	buffer:line_up_extend()
 end
 
-keys['csdown'] = function()
+keys['ctrl+shift+down'] = function()
 	buffer:line_down_extend()
 	buffer:line_down_extend()
 	buffer:line_down_extend()
@@ -107,12 +106,12 @@ keys['csdown'] = function()
 	buffer:line_down_extend()
 end
 
-keys['c\b'] = function()
+keys['ctrl+\b'] = function()
 	buffer:word_part_left_extend()
 	buffer:delete_back()
 end
 
-keys['cdel'] = function()
+keys['ctrl+del'] = function()
 	buffer:word_part_right_extend()
 	buffer:delete_back()
 end
@@ -159,9 +158,9 @@ keys.cm = ui.switch_buffer
 
 -- Bookmarks
 local m_bookmarks = textadept.bookmarks
-keys.cb = m_bookmarks.toggle
-keys.cB = function() m_bookmarks.goto_mark(true) end
-keys.caB = function() m_bookmarks.goto_mark(false) end
+keys['ctrl+b'] = m_bookmarks.toggle
+keys['ctrl+shift+b'] = function() m_bookmarks.goto_mark(true) end
+keys['ctrl+shift+alt+b'] = function() m_bookmarks.goto_mark(false) end
 
 local m_editing = textadept.editing
 keys['('] = function()
@@ -230,8 +229,8 @@ keys["+"] = function()
 	end
 end
 
-keys["aright"] = function() ui.goto_view(1, true) end
-keys["aleft"] = function() ui.goto_view(-1, true) end
+keys["alt+right"] = function() ui.goto_view(1, true) end
+keys["alt+left"] = function() ui.goto_view(-1, true) end
 
 function goto_nearest_occurrence(reverse)
 	local buffer = buffer
@@ -261,22 +260,22 @@ function goto_nearest_occurrence(reverse)
 		if buffer:search_in_target(word) == -1 then return end
 	end
 	buffer:set_sel(buffer.target_start, buffer.target_end)
-	buffer:vertical_centre_caret()
+	view:vertical_centre_caret()
 end
 
-keys.ck = function() goto_nearest_occurrence(false) end
-keys.cK = function() goto_nearest_occurrence(true) end
+keys['ctrl+k'] = function() goto_nearest_occurrence(false) end
+keys['ctrl+shift+k'] = function() goto_nearest_occurrence(true) end
 
 if not _G.CURSES then
 	keys.cq = nil
 end
 keys.cW = nil
-keys['chome'] = function() return true end
-keys['cend'] = function() return true end
-keys['cshome'] = function() return true end
-keys['csend'] = function() return true end
+keys['ctrl+home'] = function() return true end
+keys['ctrl+end'] = function() return true end
+keys['ctrl+shome'] = function() return true end
+keys['ctrl+send'] = function() return true end
 
-keys.cat = function()
+keys['ctrl+alt+t'] = function()
 	terminalString = "tilix"
 	pathString = "~"
 	if buffer.filename then
@@ -285,48 +284,48 @@ keys.cat = function()
 	io.popen(terminalString.." --working-directory="..pathString.." &")
 end
 
-keys.ch = textadept.editing.highlight_word
-keys.cg = textadept.editing.goto_line
+keys['ctrl+h'] = textadept.editing.highlight_words
+keys['ctrl+g'] = textadept.editing.goto_line
 
-keys.cC = function()
+keys['ctrl+shift+c'] = function()
 	local text = buffer:get_sel_text()
 	text = text:gsub("([^\n]+)$", "\"%1\"")
 	text = text:gsub("%s*([^\n]+)(\r?\n)", "\"%1\",%2")
 	buffer:replace_sel(text)
 end
 
-keys.cI = function()
+keys['ctrl+shift+i'] = function()
 	local text = buffer:get_sel_text()
 	text = text:gsub("([^\n]+)$", "<li>%1</li>")
 	text = text:gsub("%s*([^\n]+)(\r?\n)", "<li>%1</li>%2")
 	buffer:replace_sel(text)
 end
 
-keys["c?"] = function()
+keys['ctrl+?'] = function()
 	local text = buffer:get_sel_text()
 	local replacement = "/*\n * " .. text:gsub("\n", "\n * ") .. "\n */"
 	buffer:replace_sel(replacement)
 end
 
-keys["c,"] = function()
+keys['ctrl+,'] = function()
 	local text = buffer:get_sel_text()
 	local replacement = text:gsub("([%w.]+)", "%1,")
 	buffer:replace_sel(replacement)
 end
 
-keys['ct'] = function()
+keys['ctrl+t'] = function()
 	textadept.editing.select_word()
-	buffer:vertical_centre_caret()
+	view:vertical_center_caret()
 end
 
-keys['cT'] = function()
+keys['ctrl+shift+t'] = function()
 	buffer:drop_selection_n(buffer.selections - 1)
-	buffer:vertical_centre_caret()
+	view:vertical_center_caret()
 end
 
-keys['cj'] = function()
+keys['ctrl+j'] = function()
 	textadept.editing.select_word(true)
-	buffer:vertical_centre_caret()
+	view:vertical_center_caret()
 end
 
 keys['\n'] = function()
@@ -335,50 +334,12 @@ keys['\n'] = function()
 	buffer:end_undo_action()
 end
 
-local function bisectLeft()
-	local cp = math.min(buffer.current_pos, math.min(buffer.selection_start, buffer.selection_end))
-	local ln = buffer:line_from_position(cp)
-	local lineLength = buffer:line_length(ln)
-	local col = buffer.column[cp]
-	local beg = buffer.position_from_line(ln)
-	return math.max(beg, cp - (lineLength // 3))
-end
-
-keys['caleft'] = function()
-	buffer:goto_pos(bisectLeft())
-end
-
-local function bisectRight()
-	local cp = math.max(buffer.current_pos, math.max(buffer.selection_start, buffer.selection_end))
-	local ln = buffer:line_from_position(cp)
-	local lineLength = buffer:line_length(ln)
-	local col = buffer.column[cp]
-	local lineEnd = buffer.line_end_position[ln]
-	return math.min(lineEnd, cp + (lineLength // 3))
-end
-
-keys['caright'] = function()
-	buffer:goto_pos(bisectRight())
-end
-
-keys['casleft'] = function()
-	for i = math.min(buffer.selection_start, buffer.selection_end), bisectLeft(), -1 do
-		buffer:char_left_extend()
-	end
-end
-
-keys['casright'] = function()
-	for i = math.max(buffer.selection_start, buffer.selection_end), bisectRight() do
-		buffer:char_right_extend()
-	end
-end
-
 -- Insert unicode arrow characters
-keys.ac = {
-	["right"] = function() buffer:add_text("→") end,
-	["up"] = function() buffer:add_text("↑") end,
-	["left"] = function() buffer:add_text("←") end,
-	["down"] = function() buffer:add_text("↓") end,
+keys['alt+c'] = {
+	['right'] = function() buffer:add_text("→") end,
+	['up'] = function() buffer:add_text("↑") end,
+	['left'] = function() buffer:add_text("←") end,
+	['down'] = function() buffer:add_text("↓") end,
 }
 
 keys['f9'] = reset
@@ -438,69 +399,69 @@ keys['f8'] = function()
 	end
 end
 
-buffer:set_x_caret_policy(1, 20) -- CARET_SLOP
-buffer:set_y_caret_policy(13, 5) -- CARET_SLOP | CARET_STRICT | CARET_EVEN
+view:set_x_caret_policy(1, 20) -- CARET_SLOP
+view:set_y_caret_policy(13, 5) -- CARET_SLOP | CARET_STRICT | CARET_EVEN
 if not _G.CURSES then
-	buffer.margin_width_n[0] = 4 + 4 * buffer:text_width(c.STYLE_LINENUMBER, '9')
-	buffer.margin_width_n[1] = 14
-	buffer.margin_width_n[2] = 10
+	view.margin_width_n[0] = 4 + 4 * view:text_width(view.STYLE_LINENUMBER, '9')
+	view.margin_width_n[1] = 14
+	view.margin_width_n[2] = 10
 end
 
 
-buffer.margin_type_n[2] = c.MARGIN_SYMBOL
-buffer.margin_mask_n[2] = c.MASK_FOLDERS
-buffer.margin_sensitive_n[2] = true
-buffer:marker_define(c.MARKNUM_FOLDEROPEN, c.MARK_BOXMINUS)
-buffer:marker_define(c.MARKNUM_FOLDER, c.MARK_BOXPLUS)
-buffer:marker_define(c.MARKNUM_FOLDERSUB, c.MARK_VLINE)
-buffer:marker_define(c.MARKNUM_FOLDERTAIL, c.MARK_LCORNERCURVE)
-buffer:marker_define(c.MARKNUM_FOLDEREND, c.MARK_BOXPLUSCONNECTED)
-buffer:marker_define(c.MARKNUM_FOLDEROPENMID, c.MARK_BOXMINUSCONNECTED)
-buffer:marker_define(c.MARKNUM_FOLDERMIDTAIL, c.MARK_TCORNER)
-buffer:marker_define(textadept.bookmarks.MARK_BOOKMARK, c.MARK_BOOKMARK)
+view.margin_type_n[2] = view.MARGIN_SYMBOL
+view.margin_mask_n[2] = view.MASK_FOLDERS
+view.margin_sensitive_n[2] = true
+view:marker_define(c.MARKNUM_FOLDEROPEN, view.MARK_BOXMINUS)
+view:marker_define(c.MARKNUM_FOLDER, view.MARK_BOXPLUS)
+view:marker_define(c.MARKNUM_FOLDERSUB, view.MARK_VLINE)
+view:marker_define(c.MARKNUM_FOLDERTAIL, view.MARK_LCORNERCURVE)
+view:marker_define(c.MARKNUM_FOLDEREND, view.MARK_BOXPLUSCONNECTED)
+view:marker_define(c.MARKNUM_FOLDEROPENMID, view.MARK_BOXMINUSCONNECTED)
+view:marker_define(c.MARKNUM_FOLDERMIDTAIL, view.MARK_TCORNER)
+view:marker_define(textadept.view.MARK_BOOKMARK, view.MARK_BOOKMARK)
 
 -- line length marker
-buffer.edge_column = 80
-buffer.edge_mode = 1
+view.edge_column = 80
+view.edge_mode = 1
 
-buffer.fold_flags = 17
+view.fold_flags = 17
 buffer.mod_event_mask = c.MOD_CHANGEFOLD
 
 -- autocomplete
 buffer.auto_c_choose_single = true
 buffer.auto_c_cancel_at_start = false
 buffer.auto_c_ignore_case = true
-buffer.auto_c_max_width = 60
-buffer.auto_c_max_height = 10
+view.auto_c_max_width = 60
+view.auto_c_max_height = 10
 
 -- multiple selections
-if not WIN32 and not OSX then buffer.rectangular_selection_modifier = 8 end
+if not WIN32 and not OSX then view.rectangular_selection_modifier = 8 end
 buffer.multiple_selection = true
 buffer.multi_paste = 1
 textadept.editing.paste_reindents = false
 buffer.additional_selection_typing = true
-buffer.additional_carets_visible = true
+view.additional_carets_visible = true
 buffer.selection_mode = 2
 
 -- wrapping
-buffer.wrap_visual_flags = 1
-buffer.wrap_visual_flags_location = 1
+view.wrap_visual_flags = 1
+view.wrap_visual_flags_location = 1
 
 -- annotations
-buffer.annotation_visible = 2
+view.annotation_visible = 2
 
 -- indent guides
-buffer.indentation_guides = 3
+view.indentation_guides = 3
 
 -- folding
-buffer.property['fold'] = '1'
+view.property['fold'] = '1'
 
 -- tabs and indentation
 buffer.tab_width = 4
-buffer.use_tabs = false
+buffer.use_tabs = true
 buffer.indent = 4
 buffer.tab_indents = true
 buffer.back_space_un_indents = true
 
-buffer.end_at_last_line = false
+view.end_at_last_line = false
 
