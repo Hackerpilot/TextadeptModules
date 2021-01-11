@@ -1,112 +1,94 @@
-local buffer = buffer
-local property, property_int = buffer.property, buffer.property_int
+local view, colors, styles = view, lexer.colors, lexer.styles
 
 -- required colors
-property['color.yellow']   = 0x66bab2 -- highlight color from editing.lua
-property['color.orange']   = 0x222222 -- highlight color from editing.lua
-property['color.red']      = 0x6161c2 -- diff lexer
-property['color.green']    = 0x81cc81 -- diff lexer
+colors.yellow   = 0x66bab2 -- highlight color from editing.lua
+colors.orange   = 0x222222 -- highlight color from editing.lua
+colors.red      = 0x6161c2 -- diff lexer
+colors.green    = 0x81cc81 -- diff lexer
 
-property['color.base0']    = 0x1d1616
-property['color.base1']    = 0x544f4f
-property['color.base2']    = 0x8c8484
-property['color.base3']    = 0xc4b9b9
-property['color.base4']    = 0xf0e1e1
-property['color.blue1']    = 0xceb49b
-property['color.green1']   = 0x93cc93
-property['color.magenta1'] = 0xa680ce
-property['color.magenta2'] = 0xce86ce
-property['color.orange1']  = 0x6192c2
-property['color.red1']     = 0x6161c2
-property['color.teal1']    = 0xcece69
-property['color.teal2']    = 0x999900
-property['color.yellow1']  = 0x66bab2
+colors.base0    = 0x1d1616
+colors.base1    = 0x544f4f
+colors.base2    = 0x8c8484
+colors.base3    = 0xc4b9b9
+colors.base4    = 0xf0e1e1
+colors.blue1    = 0xceb49b
+colors.green1   = 0x93cc93
+colors.magenta1 = 0xa680ce
+colors.magenta2 = 0xce86ce
+colors.orange1  = 0x6192c2
+colors.red1     = 0x6161c2
+colors.teal1    = 0xcece69
+colors.teal2    = 0x999900
+colors.yellow1  = 0x66bab2
 
 -- Default font.
-property['font'], property['fontsize'] = 'Fira Code', 11
---property['font'], property['fontsize'] = 'DejaVu Sans Mono', 10
---property['font'], property['fontsize'] = 'Source Code Pro', 10
+font = 'Fira Code'
+size = 11
 if WIN32 then
-  property['font'] = 'Consolas'
+  font = 'Consolas'
 elseif OSX then
-  property['font'], property['fontsize'] = 'Monaco', 12
+  font = 'Monaco'
 end
 
--- Token styles.
-property['style.nothing']      = ''
-property['style.class']        = 'fore:%(color.yellow1)'
-property['style.comment']      = 'fore:%(color.base2),italics'
-property['style.constant']     = 'fore:%(color.magenta2),bold'
-property['style.error']        = 'fore:%(color.red1),italics,bold,underline'
-property['style.function']     = 'fore:%(color.blue1)'
-property['style.keyword']      = 'fore:%(color.green1),bold'
-property['style.label']        = 'fore:%(color.base3)'
-property['style.number']       = 'fore:%(color.teal2)'
-property['style.operator']     = 'fore:%(color.base3),bold'
-property['style.regex']        = 'fore:%(color.teal1)'
-property['style.string']       = 'fore:%(color.teal1)'
-property['style.preprocessor'] = 'fore:%(color.magenta1)'
-property['style.type']         = 'fore:%(color.orange1),bold'
-property['style.variable']     = 'fore:%(color.base3),italics'
-property['style.whitespace']   = ''
-property['style.embedded']     = '%(style.tag),back:%(color.base2)'
-property['style.identifier']   = '%(style.nothing)'
-
 -- Predefined styles.
-property['style.default']     = 'font:%(font),size:%(fontsize),'..
-                                'fore:%(color.base4),back:%(color.base0)'
-property['style.linenumber']  = 'fore:%(color.base2),back:%(color.base0)'
-property['style.bracelight']  = 'fore:%(color.base2),back:%(color.green1),bold'
-property['style.bracebad']    = 'fore:%(color.text0),back:%(color.red1),bold'
-property['style.controlchar'] = '%(style.nothing)'
-property['style.indentguide'] = 'fore:%(color.base1)'
-property['style.calltip']     = 'fore:%(color.base4),back:%(color.base0)'
+styles.default     = {font = font, size = size, fore = colors.base4, back = colors.base0}
+styles.line_number  = {fore = colors.base2, back = colors.base0}
+styles.brace_light  = {fore = colors.base2, back = colors.green1, bold = true}
+styles.brace_bad    = {fore = colors.text0, back = colors.red1, bold = true}
+styles.indent_guide = {fore = colors.base1}
+styles.call_tip     = {fore = colors.base4, back = colors.base0}
 
--- Multiple Selection and Virtual Space
---buffer.additional_sel_alpha =
---buffer.additional_sel_fore =
---buffer.additional_sel_back =
---buffer.additional_caret_fore =
+-- Token styles.
+styles.nothing      = {}
+styles.class        = {fore = colors.yellow1}
+styles.comment      = {fore = colors.base2, italics = true}
+styles.constant     = {fore= colors.magenta2, bold = true}
+styles.error        = {fore = colors.red1, italics = true, bold = true, underline = true}
+styles['function']     = {fore = colors.blue1}
+styles.keyword      = {fore = colors.green1, bold = true}
+styles.label        = {fore = colors.base3}
+styles.number       = {fore = colors.teal2}
+styles.operator     = {fore = colors.base3, bold = true}
+styles.regex        = {fore = colors.teal1}
+styles.string       = {fore = colors.teal1}
+styles.preprocessor = {fore = colors.magenta1}
+styles.type         = {fore = colors.orange1, bold = true}
+styles.variable     = {fore = colors.base3, italics = true}
+styles.whitespace   = {}
+styles.embedded     = {back = colors.base2}
+styles.identifier   = {}
+
 
 -- Caret and Selection Styles.
-buffer:set_sel_fore(true, property_int['color.base0'])
-buffer:set_sel_back(true, property_int['color.base2'])
---buffer.sel_alpha =
-buffer.caret_fore = property_int['color.base4']
-buffer.caret_line_back = property_int['color.base3']
-buffer.caret_line_back_alpha = 32
+view:set_sel_fore(true, colors.base0)
+view:set_sel_back(true, colors.base2)
+view.caret_fore = colors.base4
+view.caret_line_back = colors.base3
+view.caret_line_back_alpha = 32
 
 -- Fold Margin.
-buffer:set_fold_margin_colour(true, property_int['color.base1'])
-buffer:set_fold_margin_hi_colour(true, property_int['color.base1'])
+view:set_fold_margin_color(true, colors.base1)
+view:set_fold_margin_hi_color(true, colors.base1)
 
--- Fold Margin Markers.
-local c = _SCINTILLA.constants
-
-buffer.marker_fore[c.MARKNUM_FOLDEROPEN] = property_int['color.base4']
-buffer.marker_back[c.MARKNUM_FOLDEROPEN] = property_int['color.base1']
-
-buffer.marker_fore[c.MARKNUM_FOLDER] = property_int['color.base4']
-buffer.marker_back[c.MARKNUM_FOLDER] = property_int['color.base1']
-
-buffer.marker_fore[c.MARKNUM_FOLDERSUB] = property_int['color.base4']
-buffer.marker_back[c.MARKNUM_FOLDERSUB] = property_int['color.base1']
-
-buffer.marker_fore[c.MARKNUM_FOLDERTAIL] = property_int['color.base4']
-buffer.marker_back[c.MARKNUM_FOLDERTAIL] = property_int['color.base1']
-
-buffer.marker_fore[c.MARKNUM_FOLDEREND] = property_int['color.base4']
-buffer.marker_back[c.MARKNUM_FOLDEREND] = property_int['color.base1']
-
-buffer.marker_fore[c.MARKNUM_FOLDEROPENMID] = property_int['color.base4']
-buffer.marker_back[c.MARKNUM_FOLDEROPENMID] = property_int['color.base1']
-
-buffer.marker_fore[c.MARKNUM_FOLDERMIDTAIL] = property_int['color.base4']
-buffer.marker_back[c.MARKNUM_FOLDERMIDTAIL] = property_int['color.base1']
+-- Markers.
+view.marker_fore[textadept.bookmarks.MARK_BOOKMARK] = colors.base4
+view.marker_back[textadept.bookmarks.MARK_BOOKMARK] = colors.dark_blue
+view.marker_fore[textadept.run.MARK_WARNING] = colors.base4
+view.marker_back[textadept.run.MARK_WARNING] = colors.light_yellow
+view.marker_fore[textadept.run.MARK_ERROR] = colors.base4
+view.marker_back[textadept.run.MARK_ERROR] = colors.light_red
+for i = buffer.MARKNUM_FOLDEREND, buffer.MARKNUM_FOLDEROPEN do -- fold margin
+  view.marker_fore[i] = colors.base4
+  view.marker_back[i] = colors.base1
+  view.marker_back_selected[i] = colors.grey_black
+end
 
 -- Long Lines.
-buffer.edge_colour = property_int['color.base1']
+view.edge_color = colors.base1
 
-buffer.indic_fore[textadept.editing.INDIC_HIGHLIGHT] = 0x627e8c
-buffer.indic_alpha[textadept.editing.INDIC_HIGHLIGHT] = 128
-buffer.indic_style[textadept.editing.INDIC_HIGHLIGHT] = c.INDIC_ROUNDBOX
+view.indic_fore[ui.find.INDIC_FIND] = colors.yellow
+view.indic_alpha[ui.find.INDIC_FIND] = 128
+view.indic_fore[textadept.editing.INDIC_BRACEMATCH] = colors.grey
+view.indic_fore[textadept.editing.INDIC_HIGHLIGHT] = colors.orange
+view.indic_alpha[textadept.editing.INDIC_HIGHLIGHT] = 128
+view.indic_fore[textadept.snippets.INDIC_PLACEHOLDER] = colors.grey_black
