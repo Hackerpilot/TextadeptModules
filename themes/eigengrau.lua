@@ -22,8 +22,9 @@ colors.teal2    = 0x999900
 colors.yellow1  = 0x66bab2
 
 -- Default font.
-font = 'Fira Code'
-size = 11
+--font = 'Fira Code'
+font = 'Jetbrains Mono'
+size = 12
 if WIN32 then
   font = 'Consolas'
 elseif OSX then
@@ -72,15 +73,15 @@ view:set_fold_margin_hi_color(true, colors.base1)
 
 -- Markers.
 view.marker_fore[textadept.bookmarks.MARK_BOOKMARK] = colors.base4
-view.marker_back[textadept.bookmarks.MARK_BOOKMARK] = colors.dark_blue
+view.marker_back[textadept.bookmarks.MARK_BOOKMARK] = colors.blue1
 view.marker_fore[textadept.run.MARK_WARNING] = colors.base4
-view.marker_back[textadept.run.MARK_WARNING] = colors.light_yellow
+view.marker_back[textadept.run.MARK_WARNING] = colors.yellow1
 view.marker_fore[textadept.run.MARK_ERROR] = colors.base4
-view.marker_back[textadept.run.MARK_ERROR] = colors.light_red
+view.marker_back[textadept.run.MARK_ERROR] = colors.red1
 for i = buffer.MARKNUM_FOLDEREND, buffer.MARKNUM_FOLDEROPEN do -- fold margin
   view.marker_fore[i] = colors.base4
   view.marker_back[i] = colors.base1
-  view.marker_back_selected[i] = colors.grey_black
+  view.marker_back_selected[i] = colors.base2
 end
 
 -- Long Lines.
@@ -88,7 +89,7 @@ view.edge_color = colors.base1
 
 view.indic_fore[ui.find.INDIC_FIND] = colors.yellow
 view.indic_alpha[ui.find.INDIC_FIND] = 128
-view.indic_fore[textadept.editing.INDIC_BRACEMATCH] = colors.grey
+view.indic_fore[textadept.editing.INDIC_BRACEMATCH] = colors.base2
 view.indic_fore[textadept.editing.INDIC_HIGHLIGHT] = colors.orange
 view.indic_alpha[textadept.editing.INDIC_HIGHLIGHT] = 128
-view.indic_fore[textadept.snippets.INDIC_PLACEHOLDER] = colors.grey_black
+view.indic_fore[textadept.snippets.INDIC_PLACEHOLDER] = colors.base2
