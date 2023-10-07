@@ -1,4 +1,4 @@
-local view, colors, styles = view, lexer.colors, lexer.styles
+local view, colors, styles = view, view.colors, view.styles
 
 -- required colors
 colors.yellow   = 0x66bab2 -- highlight color from editing.lua
@@ -22,8 +22,7 @@ colors.teal2    = 0x999900
 colors.yellow1  = 0x66bab2
 
 -- Default font.
---font = 'Fira Code'
-font = 'Jetbrains Mono'
+font = 'Commit Mono'
 size = 12
 if WIN32 then
   font = 'Consolas'
@@ -32,33 +31,29 @@ elseif OSX then
 end
 
 -- Predefined styles.
-styles.default     = {font = font, size = size, fore = colors.base4, back = colors.base0}
-styles.line_number  = {fore = colors.base2, back = colors.base0}
-styles.brace_light  = {fore = colors.base2, back = colors.green1, bold = true}
-styles.brace_bad    = {fore = colors.text0, back = colors.red1, bold = true}
-styles.indent_guide = {fore = colors.base1}
-styles.call_tip     = {fore = colors.base4, back = colors.base0}
+styles[view.STYLE_DEFAULT] = {font = font, size = size, fore = colors.base4, back = colors.base0}
+styles[view.STYLE_LINENUMBER] = {fore = colors.base2, back = colors.base0}
+styles[view.STYLE_BRACELIGHT] = {fore = colors.base2, back = colors.green1, bold = true}
+styles[view.STYLE_BRACEBAD] = {fore = colors.text0, back = colors.red1, bold = true}
+styles[view.STYLE_INDENTGUIDE] = {fore = colors.base1}
+styles[view.STYLE_CALLTIP] = {fore = colors.base4, back = colors.base0}
 
 -- Token styles.
-styles.nothing      = {}
-styles.class        = {fore = colors.yellow1}
-styles.comment      = {fore = colors.base2, italics = true}
-styles.constant     = {fore= colors.magenta2, bold = true}
-styles.error        = {fore = colors.red1, italics = true, bold = true, underline = true}
-styles['function']     = {fore = colors.blue1}
-styles.keyword      = {fore = colors.green1, bold = true}
-styles.label        = {fore = colors.base3}
-styles.number       = {fore = colors.teal2}
-styles.operator     = {fore = colors.base3, bold = true}
-styles.regex        = {fore = colors.teal1}
-styles.string       = {fore = colors.teal1}
-styles.preprocessor = {fore = colors.magenta1}
-styles.type         = {fore = colors.orange1, bold = true}
-styles.variable     = {fore = colors.base3, italics = true}
-styles.whitespace   = {}
-styles.embedded     = {back = colors.base2}
-styles.identifier   = {}
-
+styles[lexer.CLASS]        = {fore = colors.yellow1}
+styles[lexer.COMMENT]      = {fore = colors.base2, italic = true}
+styles[lexer.CONSTANT]     = {fore= colors.magenta2, bold = true}
+styles[lexer.ERROR]        = {fore = colors.red1, italic = true, bold = true, underline = true}
+styles[lexer.FUNCTION]     = {fore = colors.blue1}
+styles[lexer.KEYWORD]      = {fore = colors.green1, bold = true}
+styles[lexer.LABEL]        = {fore = colors.base3}
+styles[lexer.NUMBER]       = {fore = colors.teal2}
+styles[lexer.OPERATOR]     = {fore = colors.base3, bold = true}
+styles[lexer.REGEX]        = {fore = colors.teal1}
+styles[lexer.STRING]       = {fore = colors.teal1}
+styles[lexer.PREPROCESSOR] = {fore = colors.magenta1}
+styles[lexer.TYPE]         = {fore = colors.orange1, bold = true}
+styles[lexer.VARIABLE]     = {fore = colors.base3, italic = true}
+styles[lexer.EMBEDDED]     = {back = colors.base2}
 
 -- Caret and Selection Styles.
 view:set_sel_fore(true, colors.base0)
@@ -78,7 +73,7 @@ view.marker_fore[textadept.run.MARK_WARNING] = colors.base4
 view.marker_back[textadept.run.MARK_WARNING] = colors.yellow1
 view.marker_fore[textadept.run.MARK_ERROR] = colors.base4
 view.marker_back[textadept.run.MARK_ERROR] = colors.red1
-for i = buffer.MARKNUM_FOLDEREND, buffer.MARKNUM_FOLDEROPEN do -- fold margin
+for i = view.MARKNUM_FOLDEREND, view.MARKNUM_FOLDEROPEN do -- fold margin
   view.marker_fore[i] = colors.base4
   view.marker_back[i] = colors.base1
   view.marker_back_selected[i] = colors.base2
@@ -89,7 +84,7 @@ view.edge_color = colors.base1
 
 view.indic_fore[ui.find.INDIC_FIND] = colors.yellow
 view.indic_alpha[ui.find.INDIC_FIND] = 128
-view.indic_fore[textadept.editing.INDIC_BRACEMATCH] = colors.base2
+view.indic_fore[view.STYLE_BRACELIGHT] = colors.base2
 view.indic_fore[textadept.editing.INDIC_HIGHLIGHT] = colors.orange
 view.indic_alpha[textadept.editing.INDIC_HIGHLIGHT] = 128
 view.indic_fore[textadept.snippets.INDIC_PLACEHOLDER] = colors.base2

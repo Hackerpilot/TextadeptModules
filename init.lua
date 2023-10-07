@@ -6,14 +6,14 @@ local c = _SCINTILLA.constants
 -- Settings
 -------------------------------------------------------------------------------
 
-textadept.file_types.extensions["tla"] = "tlaplus"
-textadept.file_types.extensions["tach"] = "tachikoma"
-textadept.file_types.extensions["ll"] = "llvm"
-textadept.file_types.extensions["sml"] = "sml"
-textadept.editing.comment_string.sml = '(*|*)'
-textadept.editing.strip_trailing_spaces = true
+--lexer.detect_patterns["tla"] = "tlaplus"
+--lexer.detect_patterns["tach"] = "tachikoma"
+--lexer.detect_patterns["ll"] = "llvm"
+--lexer.detect_patterns["sml"] = "sml"
+--textadept.editing.comment_string.sml = '(*|*)'
+--textadept.editing.strip_trailing_spaces = true
 ui.tabs = false
-if not _G.CURSES then
+if not CURSES then
 	view:set_theme('eigengrau')
 end
 
